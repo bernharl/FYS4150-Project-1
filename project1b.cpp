@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
     filename = argv[1];
     n = atoi(argv[2]);
-    int q=0;
+    
     double a = -1.0; 
     double b = 2.0; 
     double c = -1.0;
