@@ -73,11 +73,11 @@ int main(int argc, char *argv[])
     ofstream outfile;
     outfile.open(filename);
     
-    outfile << "v_i" << " "<< "x" << " " << "Error" << endl;
+    outfile << " v_i " << " u " << " x " << " Error " << endl;
     cout << u_arr[0] << endl;
-    for (int i=1; i<=n; i++) {
+    for (int i = 1; i < n; i++) {
         double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
-        outfile << f_arr[i] << " " << x_arr[i] << " "<< error << endl;
+        outfile << f_arr[i] << " " << u_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
     outfile.close(); 
     cout <<"Beinhard"<<endl;
