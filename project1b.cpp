@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         v_arr[i] = u(x_arr[i]);
         //f_arr[i] = f(x_arr[i]) * h_sq;
         b_A[i] = b;
-        cout << f_arr[i] <<endl;
+        //cout << f_arr[i] <<endl;
     }
     for (int i = 0; i < n - 1; i++)
     {
@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
 
     for (int i = n - 1; i >= 0; i--){
         f_arr[i] = f_arr[i] - c_A[i] / b_A[i+1] * f_arr[i+1];
-        cout << "yo" << endl;
     }
 
     for (int i = 0; i < n; i++){
@@ -63,5 +62,6 @@ int main(int argc, char *argv[])
     for (int i = 0; i < n; i++){
         cout << f_arr[i]  << endl;
     }
+    
     return 0;
 }
