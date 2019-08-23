@@ -36,20 +36,14 @@ int main(int argc, char *argv[])
         x_arr[i] = i*h;
         v_arr[i] = u(x_arr[i]);
         b_arr[i] = f(x_arr[i]) * h_sq;
+        b_A[i] = b;
         //cout << x_arr[i] <<endl;
     }
-
-    for (int i = 0; i <= n-1; i++){
-        for (int j = 0; j <= n-1; j++){
-            if (i == j) {A[i][j] = b;}
-            else if (i == (j + 1)) {A[i][j] = c;}
-            else if (i == j - 1) {A[i][j] = a;}
-            else {A[i][j] = 0;}
-            cout << A[i][j] << " ";
-        }
-        cout << endl;
+    for (int i=1; i<=n-1; i++)
+    {
+        a_A[i] = a;
+        c_A[i] = c;
     }
-
     
 
     return 0;
