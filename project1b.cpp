@@ -78,11 +78,7 @@ int main(int argc, char *argv[])
     
     outfile << " v_i " << " u " << " x " << " Error " << endl;
     cout << u_arr[0] << endl;
-<<<<<<< HEAD
-    for (int i=1; i<n; i++) {
-=======
     for (int i = 1; i < n; i++) {
->>>>>>> master
         double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
         outfile << f_arr[i] << " " << u_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
