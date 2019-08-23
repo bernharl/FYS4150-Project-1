@@ -20,19 +20,22 @@ int main(int argc, char *argv[])
 
     filename = argv[1];
     n = atoi(argv[2]);
-    cout << sizeof(double)*3*n/1000000.0 << endl;
 
-    double a = -1; 
-    double b = 2; 
-    double c = -1;
-    double a_A[n-1];
-    double b_A[n];
-    double c_A[n-1];
+    double a = -1.0; 
+    double b = 2.0; 
+    double c = -1.0;
+    double* a_A = new double[n-1];
+
+    double* c_A = new double[n-1];
+    //cout << sizeof(double)*3*n/1000000.0 << endl;
+
+    double* b_A = new double[n];
+
     double h = 1.0/((double) n + 1.0);
     double h_sq = h*h;
-    double u_arr[n];
-    double f_arr[n];
-    double x_arr[n];
+    double* u_arr = new double[n];
+    double* f_arr = new double[n];
+    double* x_arr = new double[n];
 
     for (int i = 0; i < n; i++)
     {
@@ -40,7 +43,7 @@ int main(int argc, char *argv[])
         u_arr[i] = u(x_arr[i]);
         f_arr[i] = f(x_arr[i]) * h_sq;
         b_A[i] = b;
-        cout << "Original " << f_arr[i] <<endl;
+        //cout << "Original " << f_arr[i] <<endl;
     }
     int counter = 0;
     for (int i = 0; i < n - 1; i++){
@@ -58,10 +61,10 @@ int main(int argc, char *argv[])
         counter += 1;
 
         f_arr[i] = f_arr[i] - c_A[i] / b_A[i] * f_arr[i+1];
-        cout << f_arr[i]  << " i: " << i << endl;
+        //cout << f_arr[i]  << " i: " << i << endl;
 
     }
-    cout << "counter " << counter << endl;
+    //cout << "counter " << counter << endl;
 
     for (int i = 0; i < n; i++){
         f_arr[i] /= b_A[i];
@@ -70,6 +73,6 @@ int main(int argc, char *argv[])
 
     //for (int i = 0; i < n; i++){
     //}
-    
+    cout << "Hvis du ser dette: smil!" << endl;
     return 0;
 }
