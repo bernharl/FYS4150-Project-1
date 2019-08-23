@@ -29,16 +29,16 @@ int main(int argc, char *argv[])
     double h = 1.0/((double) n + 1);
     double h_sq = h*h;
     double v_arr[n];
-    double f_arr[n] = {1, 2, 3, 4, 5};
+    double f_arr[n];
     double x_arr[n];
 
     for (int i = 0; i < n; i++)
     {
         x_arr[i] = i*h;
         v_arr[i] = u(x_arr[i]);
-        //f_arr[i] = f(x_arr[i]) * h_sq;
+        f_arr[i] = f(x_arr[i]) * h_sq;
         b_A[i] = b;
-        //cout << f_arr[i] <<endl;
+        cout << "Original " << f_arr[i] <<endl;
     }
     for (int i = 0; i < n - 1; i++)
     {
