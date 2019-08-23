@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     double* a_A = new double[n-1];
 
     double* c_A = new double[n-1];
-    //cout << sizeof(double)*3*n/1000000.0 << endl;
 
     double* b_A = new double[n];
 
@@ -51,15 +50,17 @@ int main(int argc, char *argv[])
         c_A[i] = c;
         
     }
-    for (int i = 1; i < n; i++){
+    for (int i = 1; i <= n; i++){
+        //6 floating point operations
+        //n - 2 iterations
         b_A[i] = b_A[i] - a_A[i-1] / b_A[i-1] * c_A[i-1];
         f_arr[i] = f_arr[i] - a_A[i-1] / b_A[i-1] * f_arr[i-1];
     
     }    
 
     for (int i = n - 1; i >= 0; i--){
-        counter += 1;
-
+        //3 floating point operations
+        //n-2 iterations
         f_arr[i] = f_arr[i] - c_A[i] / b_A[i] * f_arr[i+1];
         //cout << f_arr[i]  << " i: " << i << endl;
 
@@ -67,6 +68,8 @@ int main(int argc, char *argv[])
     //cout << "counter " << counter << endl;
 
     for (int i = 0; i < n; i++){
+        //1 floating point operation
+        //n-1 iterations
         f_arr[i] /= b_A[i];
         
     }
@@ -75,13 +78,15 @@ int main(int argc, char *argv[])
     
     outfile << "v_i" << " "<< "x" << " " << "Error" << endl;
     cout << u_arr[0] << endl;
-    for (int i=1; i<=n; i++) {
+    for (int i=1; i<n; i++) {
         double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
         outfile << f_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
     outfile.close(); 
-    cout <<"Beinhard"<<endl;
-    cout << "Hvis du ser dette: smil!" << endl;
+
+    int operations;
+    operations = 6*(n - 1) + 3*(n - 1) + (n-1);
+    cout << operations << endl;
 
     delete [] a_A; delete [] b_A; delete [] c_A;
     delete [] u_arr; delete [] f_arr; delete [] x_arr; 
