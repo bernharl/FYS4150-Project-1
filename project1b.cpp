@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
         outfile << f_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
     outfile.close(); 
-
+    cout <<"Beinhard"<<endl;
     cout << "Hvis du ser dette: smil!" << endl;
 
     delete [] a_A; delete [] b_A; delete [] c_A;
