@@ -70,9 +70,21 @@ int main(int argc, char *argv[])
         f_arr[i] /= b_A[i];
         
     }
+    ofstream outfile;
+    outfile.open(filename);
+    
+    outfile << "v_i" << " "<< "x" << " " << "Error" << endl;
+    cout << u_arr[0] << endl;
+    for (int i=1; i<=n; i++) {
+        double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
+        outfile << f_arr[i] << " " << x_arr[i] << " "<< error << endl;
+    }
+    outfile.close(); 
 
-    //for (int i = 0; i < n; i++){
-    //}
     cout << "Hvis du ser dette: smil!" << endl;
+
+    delete [] a_A; delete [] b_A; delete [] c_A;
+    delete [] u_arr; delete [] f_arr; delete [] x_arr; 
+
     return 0;
 }
