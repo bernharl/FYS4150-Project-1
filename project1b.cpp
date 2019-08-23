@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <ctime>
 
 using namespace std;
 
@@ -15,6 +16,7 @@ inline double u(double x)
 
 int main(int argc, char *argv[]) 
 {
+    clock_t t_start = clock();
     int n;
     string filename;
 
@@ -70,6 +72,10 @@ int main(int argc, char *argv[])
         f_arr[i] /= b_A[i];
         
     }
+    clock_t t_end = clock();
+    double CPU_time = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
+    cout << "CPU time: " << CPU_time << " ms " << endl;
+
     ofstream outfile;
     outfile.open(filename);
     
