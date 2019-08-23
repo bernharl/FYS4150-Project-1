@@ -14,15 +14,8 @@ inline double u(double x)
     return 1 - (1 - exp(-10)) * x - exp(-10*x);
 }
 
-int main(int argc, char *argv[]) 
+void Thomas_algorithm(string filename, int n)
 {
-    clock_t t_start = clock();
-    int n;
-    string filename;
-
-    filename = argv[1];
-    n = atoi(argv[2]);
-    
     double a = -1.0; 
     double b = 2.0; 
     double c = -1.0;
@@ -52,6 +45,7 @@ int main(int argc, char *argv[])
         c_A[i] = c;
         
     }
+    clock_t t_start = clock();
     for (int i = 1; i <= n; i++){
         //6 floating point operations
         //n - 2 iterations
@@ -96,6 +90,19 @@ int main(int argc, char *argv[])
 
     delete [] a_A; delete [] b_A; delete [] c_A;
     delete [] u_arr; delete [] f_arr; delete [] x_arr; 
+
+}
+
+int main(int argc, char *argv[]) 
+{
+    
+    int n;
+    string filename;
+
+    filename = argv[1];
+    n = atoi(argv[2]);
+    
+    Thomas_algorithm(filename, n);
 
     return 0;
 }
