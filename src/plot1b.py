@@ -8,6 +8,6 @@ x = data[:, 2]
 error = data[:, 3]
 
 plt.plot(x, v, label = "Numerical")
-# plt.plot(x, u, label = "Analytical")
+plt.plot(x, u, label = "Analytical")
 plt.legend()
 plt.show()

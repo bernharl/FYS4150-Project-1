@@ -79,7 +79,7 @@ void Thomas_algorithm(string filename, int n)
     ofstream outfile;
     outfile.open(filename);
 
-    outfile << " v_i " << " u " << " x " << " Error " << endl;
+    outfile << " v_i   " << "   u   " << "   x   " << "   Error " << endl;
     cout << u_arr[0] << endl;
     for (int i = 1; i < n; i++) {
         double error = abs((u_arr[i] - f_arr[i]) / u_arr[i]);
@@ -103,7 +103,7 @@ void Specialized_algorithm(string filename, int n)
     double b = 2.0;
     double c = -1.0;
 
-    double h = 1.0/((double) n + 1.0);
+    double h = 1.0 / ((double) n + 1.0);
     double h_sq = h * h;
     double* u_arr = new double[n];
     double* f_arr = new double[n];
@@ -122,17 +122,25 @@ void Specialized_algorithm(string filename, int n)
     clock_t t_start = clock();
     //algoritme
     double A = a - pow(b, 2) / a;
+    //cout << A << endl;
     double ba = b / a;
+    cout << ba << endl;
     double bA = b / A;
+    //cout << bA << endl;
 
     for (int i=1; i<=n; i++)
     {
+        //f_arr[i] = f_arr[i] - c_A[i] / b_A[i] * f_arr[i+1];
         f_arr[i] = f_arr[i] - ba * f_arr[i-1];
+        //cout << f_arr[i] << endl;
     }
+    cout << bA << endl;
     for (int i=n-1; i>=0; i--)
     {
         f_arr[i] = f_arr[i] - bA * f_arr[i+1];
+        //cout << f_arr[i] << endl;
     }
+
     for (int i = 0; i < n; i++) {
         //1 floating point operation
         //n-1 iterations
@@ -146,11 +154,12 @@ void Specialized_algorithm(string filename, int n)
     ofstream outfile;
     outfile.open(filename);
 
-    outfile << " v_i " << " u " << " x " << " Error " << endl;
-    cout << u_arr[0] << endl;
+    outfile << " v_i   " << "   u   " << "   x   " << "   Error   " << endl;
+    //cout << u_arr[0] << endl;
     for (int i = 1; i < n; i++) {
         double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
-        outfile << f_arr[i] << " " << u_arr[i] << " " << x_arr[i] << " "<< error << endl;
+        outfile << f_arr[i] << " " << u_arr[i]
+         << " " << x_arr[i] << " " << error << endl;
     }
     outfile.close();
 
