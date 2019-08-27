@@ -73,20 +73,24 @@ void Thomas_algorithm(string filename, int n)
     clock_t t_end = clock();
     double CPU_time = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
     cout << "CPU time: " << CPU_time << " ms " << endl;
-    /*
+
+
+
     ofstream outfile;
     outfile.open(filename);
 
     outfile << " v_i " << " u " << " x " << " Error " << endl;
     cout << u_arr[0] << endl;
     for (int i = 1; i < n; i++) {
-        double error = abs((u_arr[i] - f_arr[i])/u_arr[i]);
+        double error = abs((u_arr[i] - f_arr[i]) / u_arr[i]);
         outfile << f_arr[i] << " " << u_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
     outfile.close();
-    */
+
+
+
     int operations;
-    operations = 6*(n - 1) + 3*(n - 1) + (n - 1);
+    operations = 6 * (n - 1) + 3 * (n - 1) + (n - 1);
     cout << operations << endl;
 
     delete [] a_A; delete [] b_A; delete [] c_A;
@@ -117,9 +121,9 @@ void Specialized_algorithm(string filename, int n)
 
     clock_t t_start = clock();
     //algoritme
-    double A = a - pow(b, 2)/a;
-    double ba = b/a;
-    double bA = b/A;
+    double A = a - pow(b, 2) / a;
+    double ba = b / a;
+    double bA = b / A;
 
     for (int i=1; i<=n; i++)
     {
@@ -136,7 +140,9 @@ void Specialized_algorithm(string filename, int n)
         f_arr[i] /= b;
     }
 
-    /*
+
+
+
     ofstream outfile;
     outfile.open(filename);
 
@@ -147,7 +153,10 @@ void Specialized_algorithm(string filename, int n)
         outfile << f_arr[i] << " " << u_arr[i] << " " << x_arr[i] << " "<< error << endl;
     }
     outfile.close();
-    */
+
+
+
+
     clock_t t_end = clock();
     double CPU_time = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
     cout << "CPU time: " << CPU_time << " ms " << endl;
@@ -164,7 +173,7 @@ int main(int argc, char *argv[])
     filename = argv[1];
     n = atoi(argv[2]);
 
-    Thomas_algorithm(filename, n);
+    //Thomas_algorithm(filename, n);
     Specialized_algorithm(filename, n);
 
     return 0;
