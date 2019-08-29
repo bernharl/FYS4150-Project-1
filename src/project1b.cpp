@@ -3,7 +3,6 @@
 #include <cmath>
 #include <ctime>
 
-
 using namespace std;
 
 inline double f(double x)
@@ -101,7 +100,6 @@ void Specialized_algorithm(string filename, int n)
 {
     double a = -1.0;
     double b = 2.0;
-    double c = -1.0;
 
     double h = 1.0 / ((double) n + 1.0);
     double h_sq = h * h;
@@ -121,23 +119,23 @@ void Specialized_algorithm(string filename, int n)
 
     clock_t t_start = clock();
     //algoritme
-    double A = a - pow(b, 2) / a;
+    double B = b - pow(a, 2) / b;
     //cout << A << endl;
-    double ba = b / a;
-    cout << ba << endl;
-    double bA = b / A;
+    double ab = a / b;
+    //cout << ba << endl;
+    double aB = a / B;
     //cout << bA << endl;
 
     for (int i=1; i<=n; i++)
     {
         //f_arr[i] = f_arr[i] - c_A[i] / b_A[i] * f_arr[i+1];
-        f_arr[i] = f_arr[i] - ba * f_arr[i-1];
+        f_arr[i] = f_arr[i] - ab * f_arr[i-1];
         //cout << f_arr[i] << endl;
     }
-    cout << bA << endl;
+
     for (int i=n-1; i>=0; i--)
     {
-        f_arr[i] = f_arr[i] - bA * f_arr[i+1];
+        f_arr[i] = f_arr[i] - aB * f_arr[i+1];
         //cout << f_arr[i] << endl;
     }
 
@@ -169,9 +167,8 @@ void Specialized_algorithm(string filename, int n)
     clock_t t_end = clock();
     double CPU_time = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
     cout << "CPU time: " << CPU_time << " ms " << endl;
-    //delete [] a_A; delete [] b_A; delete [] c_A;
     delete [] u_arr; delete [] f_arr; delete [] x_arr;
-
+  
 }
 int main(int argc, char *argv[])
 {
