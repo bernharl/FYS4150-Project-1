@@ -10,7 +10,7 @@ if len(sys.argv) == 2:
     datafile = sys.argv[1]
 
 if len(sys.argv) < 2:
-    datafile = input("Please enter the name of the data folder you wish to plot: ")
+    datafile = input("Please enter the name of the data file you wish to plot: ")
 
 
 data = np.loadtxt(datafile, skiprows = 1)
