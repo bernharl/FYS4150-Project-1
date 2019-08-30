@@ -15,6 +15,7 @@ if len(sys.argv) < 2:
 data = np.loadtxt(datafile, skiprows = 1)
 n = data[:, 0]
 error = data[:, 1]
-
-plt.loglog(n, error)
+print(np.max(error))
+plt.loglog(n[1:], error[1:])
+plt.grid()
 plt.show()

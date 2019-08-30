@@ -35,7 +35,7 @@ double Thomas_algorithm(string filename, int n, bool write = false)
 
     for (int i = 0; i < n; i++)
     {
-        x_arr[i] = i*h;
+        x_arr[i] = (i + 1.0)*h;
         u_arr[i] = u(x_arr[i]);
         f_arr[i] = f(x_arr[i]) * h_sq;
         b_A[i] = b;
@@ -57,7 +57,7 @@ double Thomas_algorithm(string filename, int n, bool write = false)
 
     }
 
-    for (int i = n-2; i > 0; i--) {
+    for (int i = n-2; i >= 0; i--) {
         //3 floating point operations
         //n-1 iterations
 
@@ -118,78 +118,60 @@ double Specialized_algorithm(string filename, int n, bool write = false)
 
     double h = 1.0 / ((double) n + 1.0);
     double h_sq = h * h;
-    double* u_arr = new double[n + 2];
-    double* f_arr = new double[n + 2];
-    double* x_arr = new double[n + 2];
-    double* b_tilde = new double[n + 2];
-    double* error = new double[n + 2];
+    double* u_arr = new double[n];
+    double* f_arr = new double[n];
+    double* x_arr = new double[n];
+    double* b_tilde = new double[n];
+    double* error = new double[n];
 
-    for (int i = 0; i < n + 1; i++)
+    for (int i = 0; i < n; i++)
     {
-        x_arr[i] = i * h;
+        x_arr[i] = (i + 1.0) * h;
         u_arr[i] = u(x_arr[i]);
         f_arr[i] = f(x_arr[i]) * h_sq;
-        //cout << "Original " << f_arr[i] <<endl;
-        //cout << b_tilde[i] << "  " << i << endl;
-
     }
-
     //algoritme
-    //double b_tilde = b - pow(a, 2) / b;
     
-    for (int i = 1; i < n + 1; i++)
+    for (int i = 0; i < n; i++)
     {
       //b_tilde[i] = 2.0 - (i - 1.0) / i;
-    b_tilde[i] = 1.0 + 1.0 / ((double) i);
-      //b_tilde[i] = b_tilde[i] - 1.0 / b_tilde[i-1];
-      //cout << b_tilde[i] << endl;
-
+    b_tilde[i] = 1.0 + 1.0 / ((double) i + 1.0);
     }
-    //cout << A << endl;
-    //double ab = -1.0 / b;
-    //cout << ba << endl;
-    //double ab_tilde = -1.0 / b_tilde;
-    //cout << bA << endl;
+    
     clock_t t_start = clock();
+
     for (int i = 1; i < n; i++)
     {
-        //f_arr[i] = f_arr[i] - c_A[i] / b_A[i] * f_arr[i+1];
         f_arr[i] = f_arr[i] + f_arr[i - 1] / b_tilde[i];
-        cout << b_tilde[i+1] << "  " << f_arr[i + 1] << "  " << f_arr[i] << endl;
-
     }
 
-    for (int i = n - 1; i > 0; i--)
+    for (int i = n - 2; i >= 0; i--)
     {
         f_arr[i] = f_arr[i] + f_arr[i + 1] / b_tilde[i];
-        //cout << f_arr[i] << endl;
-
     }
 
-    for (int i = 1; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         //1 floating point operation
-        //n-1 iterations
-        //f_arr[i] /= b_A[i];
+        //n iterations
         f_arr[i] = f_arr[i] / b_tilde[i];
-        //cout << f_arr[i] << endl;
     }
 
     clock_t t_end = clock();
     double CPU_time = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
     cout << "CPU time: " << CPU_time << " ms " << endl;
     
-    for (int i = 1; i < n; i++){
+    for (int i = 0; i < n; i++){
         //cout << u_arr[i] << "  " << f_arr[i] << endl;
         error[i] = abs((u_arr[i] - f_arr[i]) / u_arr[i]);
     }
-    cout << u_arr[1] << "  " << u_arr[n - 2] << "  " << u_arr[100] << endl;
+
     if (write == true){
         ofstream outfile;
         outfile.open(filename);
 
         outfile << " v_i   " << "   u   " << "   x   " << "   Error   " << endl;
         //cout << u_arr[0] << endl;
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             outfile << f_arr[i] << " " << u_arr[i]
             << " " << x_arr[i] << " " << error[i] << endl;
         }
@@ -198,7 +180,7 @@ double Specialized_algorithm(string filename, int n, bool write = false)
     }
     int max_i   = 0;
     double max_err = 0;
-    for (int i = 1; i < n; i++){
+    for (int i = 0; i < n; i++){
         if (error[i] > max_err){
             max_err = error[i];
             max_i = i;
@@ -222,8 +204,8 @@ int main(int argc, char *argv[])
     filename = argv[1];
     n = atoi(argv[2]);
 
-    //double max_err = Thomas_algorithm(filename, 201);
-    double max_err = Specialized_algorithm(filename, n, true);
+    double max_err = Thomas_algorithm(filename, n, true);
+    //double max_err = Specialized_algorithm(filename, n, true);
     //cout << max_err << endl;
     /*
     ofstream outfile;
