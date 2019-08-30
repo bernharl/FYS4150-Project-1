@@ -502,3 +502,4 @@ bb.out.*
 # End of https://www.gitignore.io/api/c++,latex,linux,macos,python,visualstudiocode
 compiledfile
 *.dat
+*.plist
