@@ -1,13 +1,13 @@
 
-\documentclass{aastex62}
+\documentclass[twocolumn]{aastex62}
 
 
 \newcommand{\vdag}{(v)^\dagger}
 \newcommand\aastex{AAS\TeX}
 \newcommand\latex{La\TeX}
-
-
-
+\usepackage{amsmath}
+\usepackage{physics}
+\usepackage{hyperref}
 
 
 \begin{document}
@@ -28,8 +28,100 @@
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
+A fundamental characteristic of processes in natur is that things change over time, as time flows in a spesific direction. Thus in order to understand a physical process it is essential to be able to formulate such a change in terms of differential equations. Furthermore since most processes in nature possess a high level of complexity, unabling a analytical solution to the corresponding differential equation, one must ofter fall back to numerical techniques. However, if numerics is used and a high level of accuracy is required, one must use a computer to solve the equations.
 
+In this paper we will explore problems often encountered when solving differential numerically on a computer, by looking at one specific example of a differentaial equation. We will explore efficient algorithms for solving the one-dimensional Poisson equation (an ordinary differential equation, of ODE, often encountered in physics, by means of numerics. Also we will discuss how the numerical error behaves.
+ 
 \section{Method} \label{sec:method}
+A differential equation often encountered in physics, e.g. electromagnetism,  is the Poisson equation. In electromagnetism the Poisson equation relates the electric potential $\Phi$ to a charge density $\rho(\vec{r})$ as 
+
+\begin{equation}
+	\nabla^2\Phi = -4\pi\rho(\vec{r}),
+\end{equation}
+
+for a positional vector $\vec{r}$. Assuming $\Phi$ only depends on the radial distance from the charge $r$, we can simply omit the angular terms in the differential equation, such that it becomes
+ 
+\begin{align}
+	\frac{1}{r^2}\frac{d}{dr}\left(r^2\frac{d\Phi}{dr}\right) = -4\pi\rho(r).
+\label{eq:one_dim_poisson1}	
+\end{align}
+To make this more convinient to handle, we use the substitution $\tilde{\Phi} = \Phi/r$, such that (\ref{eq:one_dim_poisson1}) can be rewritten as 
+\begin{align}
+	\frac{d^2\Phi}{dr^2} = -4\pi\rho(r).
+\end{align}
+
+The ODE is now on the form 
+\begin{align}
+	-u''(x) = f(x),
+	\label{eq:ODE}
+\end{align}
+
+where the inhomogenous term $-4\pi\rho\to f$, the variable $r\to x$ and the function $\Phi\to u$. From now on only consider (\ref{eq:ODE}) on dimensionless form. For concreteness we impose the (Dirichlett) bloundary conditions $u(0) = u(1) = 0$ and let analytical solution $u(x)$ and the r.h.s. of (\ref{eq:ODE}) $f(x)$ be given by
+
+\begin{align}
+	u(x) &= 1 - (1 - e^{10})x - e^{10x}\\
+	f(x) &= 100e^{-10x}.
+\end{align}
+Since we know the analytical solution $u(x)$, we may compare it to the numerical solution after solving.
+
+So far everything is still continous, but to enable a solving by computer we must discretize the equation. The first step in discretizing the equations is to divide the interval $x\in(0,1)$ on which to solve the equation, into $n+2$ points. Then the $i$th grid point will be given by $x_i = ih$, for a step size $h = \frac{1}{n + 1}$. The boundary points are then $x_0 = 0$ and $x_{n+1} = 1$. Next we define the $i$th descrete values of the solution by $u(x_i) \equiv v_i$ and let the r.h.s of the ODE be discretized by $f(x_i) \equiv f_i$. We then have $v_0 = v_{n+1}$ as boundary conditions.
+
+Now that we have found a suitable discretized representation of the grid, we must find an expression for a descrete approximation for a second order derivative, in order to express the ODE on descrete form. We do this by first considering the Taylor expansion for the function $u(x)$ around a value $x_{i+1} $ and $x_{i-1}$ given as
+\begin{align}
+	u(x_i + h) &= v_{i+1} \\
+	&= u(x_i) + hu'(x_i) + \frac{h^2}{2!}u''(x_i) +\cdots\\
+	&= v_i + hv_i' + \frac{h^2}{2!}v_i'' + \cdots\\
+	u(x_i - h) &= v_{i-1} \\
+	& = u(x_i) - hu'(x_i) + \frac{h^2}{2!}u''(x_i) -\cdots\\
+	= v_i - hv_i' + \frac{h^2}{2!}v_i'' - \cdots.
+\end{align} 
+Now adding these two together and solving for the double derivative we get an approximation for the second order derivative of $u$ as 
+\begin{align}
+	u_i'' = \frac{v_{i+1} + v_{i-1} - 2v_i}{h^2} + 2\sum^\infty_{j=1} \frac{v_i^{2j+2}}{(2j + 2)!}h^{2j}.
+\end{align}
+If we assume that the second term (the sum) is small compared to the first term, we can write 
+\begin{align}
+	v_i''\approx \frac{v_{i+1} + v_{i-1} - 2v_i}{h^2},
+\end{align}
+and let the second term be the error of the approximation
+\begin{align}
+	\epsilon_{analy} \equiv 2\sum^\infty_{j=1} \frac{v_i^{2j+2}}{(2j + 2)!}h^{2j}.
+\end{align} Assuming that the first term in $\epsilon_{analy}$ is dominant , i.e. the rest of the terms fall of rapidly, we can see that the numerical error should behave as $\epsilon\sim h^2$. However, since we want to solve the equation on a computer, the error will not necessarily behave like this. Nevertheless it is a good starting point in understanding the numerical error. 
+
+To complete the error analysis we first must obtain the numerical solution $v_i$. Inserting the numerical second order derivative into (\ref{eq:ODE}) we get 
+\begin{align}
+	v_i''\approx -\frac{v_{i+1} + v_{i-1} - 2v_i}{h^2} = f_i.
+\end{align}
+Since we already know the solutions of $v_i$ at the boundary $i = 0$ and $i = n+1$, we only need to consider the ODE for $i = 1, 2, 3, \ldots, n$.
+Next, multiplying both sides by $h^2$ we get the equation
+\begin{align}
+	-v_{i-1}  + 2v_i - v_{i+1} = h^2f_i\equiv \tilde{f}_i.
+\end{align}
+We kan now write out the ODE for different $i = 1, 2, \ldots, n$: 
+\begin{align*}
+	-0 + 2v_1 - v_1 &= \tilde{f}_1\\
+	-v_1 + 2v_2 - v_1 &= \tilde{f}_2\\
+	&\vdots\\
+	-v_{n-1} + 2v_n - 0 &= \tilde{f}_n,
+\end{align*}
+since $v_0 = v_{n+1} = 0$. We see that if we define vectors $\vec{v}^T \equiv [v_1, v_2, \ldots, v_n]$ and $\vec{\tilde{f}}^T \equiv [\tilde{f}_1, \tilde{f}_2, \ldots, \tilde{f}_n]$, we can write the above set of equation as a matrix equation 
+\begin{align}
+	A\vec{v} =  \vec{\tilde{f}}, 
+	\label{eq:matrix_form}
+\end{align}
+with a coefficient matrix 
+\[ A = 
+\begin{bmatrix}
+	2& -1& 0 &\dots   & \dots &0 \\
+	-1 & 2 & -1 &0 &\dots &\dots \\
+    0&-1 &2 & -1 & 0 & \dots \\
+    & \dots   & \dots &\dots   &\dots & \dots \\
+    0&\dots   &  &-1 &2& -1 \\
+    0&\dots    &  & 0  &-1 & 2 \\
+\end{bmatrix}.
+\]
+Because this coefficient matrix is a positive definite tridiagonal matrix, meaning that it is not singular, we can always find a solution to (\ref{eq:matrix_form}). However, one can generalize this technique to a matrix equation with a tridiagonal matrix corresponding to coefficients of a different derivative approximation formula.
+
 
 \section{Results} \label{sec:results}
 
@@ -38,8 +130,8 @@
 \section{Conclusion} \label{sec:conclusion}
 
 \
-\begin{thebibliography}{}
-\end{thebibliography}
+%\begin{thebibliography}{}
+%\end{thebibliography}
 \end{document}
 
 % End of file `sample62.tex'.
