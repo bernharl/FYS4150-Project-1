@@ -483,5 +483,23 @@ dmypy.json
 # Ignore all local history of files
 .history
 
+### Valgrind ###
+# Callgrind output files
+callgrind.out
+callgrind.out.*
+
+# Cachegrind output files
+cachegrind.out
+cachegrind.out.*
+
+# Massif output files
+massif.out
+massif.out.*
+
+# BBV output files
+bb.out
+bb.out.*
 # End of https://www.gitignore.io/api/c++,latex,linux,macos,python,visualstudiocode
-compliedfile
+compiledfile
+*.dat
+*.plist
