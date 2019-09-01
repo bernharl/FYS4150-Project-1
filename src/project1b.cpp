@@ -208,6 +208,7 @@ void error_CPU_time_to_file(int exponent, string data_name,
         outfile1 << pow(10, i) << " " << log10(max_err_special) << endl; 
         outfile2 << pow(10, i) << " " << CPU_time_special << " " << CPU_time_thomas << endl;
     }
+    
     outfile1.close();
     outfile2.close();
 }
