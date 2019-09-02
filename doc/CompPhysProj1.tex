@@ -120,9 +120,28 @@ with a coefficient matrix
     0&\dots    &  & 0  &-1 & 2 \\
 \end{bmatrix}.
 \]
-Because this coefficient matrix is a positive definite tridiagonal matrix, meaning that it is not singular, we can always find a solution to (\ref{eq:matrix_form}). However, one can generalize this technique to a matrix equation with a tridiagonal matrix corresponding to coefficients of a different derivative approximation formula.
+Because this coefficient matrix is a positive definite tridiagonal Töplitz matrix, meaning that it is not singular, we can always find a solution to (\ref{eq:matrix_form}). However, one can generalize this technique to a matrix equation with a tridiagonal matrix corresponding to coefficients of a different derivative approximation formula. We will thus consider a matrix 
+\[A = 
+\begin{bmatrix}
+	b_1& c_1 & 0 &\dots   & \dots &\dots \\
+	a_1 & b_2 & c_2 &\dots &\dots &\dots \\
+	& a_2 & b_3 & c_3 & \dots & \dots \\
+	& \dots   & \dots &\dots   &\dots & \dots \\
+	&   &  &a_{n-2}  &b_{n-1}& c_{n-1} \\
+	&    &  &   &a_{n-1} & b_n \\
+\end{bmatrix},
+\]
+which can be described intierly by three vectors $\vec{a} = [a_1,\ldots, a_{n-1}]$, $\vec{b} = [b_1,\ldots,b_n]$ and $\vec{c} = [c_1,\ldots,c_{n-1}]$ representing the diagonal as well as the lower and upper diagonals. The remaining matrix elements are made up of zeros, and are thus not containing any relevant information. However, if this would be a dense matrix, it would have to be saved in its entirety. This is an important advantage, since saving such a tridiagonal matrix requires much less memory than saving a dense matrix. Suppose we use double precision on each matrix element, meaning each matrix element takes 8 bytes of memory. Then for an $n\times n$ matrix we would need $n\cdot n\cdot 8$ bytes to save the entire matrix. If we use the fact that the matrix $A$ is tridiagonal and only its three diagonals are saved, we only need $\left(n + (n-1) + (n-1)\right) \cdot \text{bytes} = 8(3n - 2) \text{bytes}$. Thus if we require a very fine grid, meaning large $n$, we quickly run out of space in the computers memory. 
 
-
+Now that we have discussed the way to save the matrix $A$ as three vectors, we need to find an algorithm to solve the matrix equation. The firsst step in that algorithm is simply a Gaussian elimination of the lower diagonal elements $a_1,\ldots, a_{n-1}$. If we write out the matrix equation we get 
+\begin{align}
+	b_1 v_1 + c_1v_2 + 0  \cdots &= \tilde{f}_1\\
+	a_1 v_1 + b_2 v_2 + c_2 v_2 + 0 \cdots &= \tilde{f}_2\\
+	&\vdots\\
+	\cdots+0+a_{n-1} v_{n-2} + b_{n-1} + c_{n-1} &= \tilde{f}_{n-1}\\
+	\cdots+0+a_{n-1}v_{n-1} + b_{n} v{v} &= \tilde{f}_n.
+\end{align}
+Now we can take the second row and subtract the first row multiplyed by a factor $a_1/b_1$ in order to eliminate the first elements of the lower diagonal $a_1$. At the same time it changes the second diagonal element 
 \section{Results} \label{sec:results}
 
 \section{Discussion} \label{sec:discussion}
