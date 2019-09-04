@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
 data = np.loadtxt(datafile, skiprows = 1)
 n = data[:, 0]
 error = data[:, 1]
-print(np.max(error))
-plt.semilogx(n[1:], error[1:])
+
+plt.plot(np.log10(n), error)
 plt.grid()
 plt.show()

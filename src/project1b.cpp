@@ -3,6 +3,7 @@
 #include <cmath>
 #include <ctime>
 #include <algorithm>
+#include <iomanip>
 #include "keyword_args.h"
 
 using namespace std;
@@ -19,7 +20,8 @@ inline double u(double x)
 }
 
 void data_to_file(double*, double*, double*, double*, string);
-void Thomas_algorithm(string filename, int n, double &CPU_time_thomas, double &max_err_thomas, bool write = false)
+void Thomas_algorithm(string filename, int n, double &CPU_time_thomas, 
+                        double &max_err_thomas, bool write = false)
 {   /* Function solves one-dimensional Poisson equation
        using a Thomas algorithm. Function takes filename
        of file to save data to, matrix/array dimensions n
@@ -104,7 +106,8 @@ void Thomas_algorithm(string filename, int n, double &CPU_time_thomas, double &m
     delete [] error;
 }
 
-void Specialized_algorithm(string filename, int n, double &CPU_time_special, double &max_err_special, bool write = false)
+void Specialized_algorithm(string filename, int n, double& CPU_time_special, 
+                            double& max_err_special, bool write = false)
 {
     //double a = -1.0;
     //double b = 2.0;
@@ -187,36 +190,44 @@ void data_to_file(double *v_arr, double *u_arr, double *x_arr, double *error, st
     outfile.close();
 }
 
-void error_CPU_time_to_file(int exponent, string data_name, 
-                            string error_name, string CPU_time_name)
+void thomas_n_to_file(int exponent, string data_name, string thomas_name)
 {   
-    ofstream outfile1;
-    ofstream outfile2; 
-
-    outfile1.open(error_name);
-    outfile2.open(CPU_time_name);
-    outfile1 << "n:" << "     log10(max_error)" << endl;
-    outfile2 << "n:" << "     CPU time thomas [ms]:" << "        CPU time special [ms]:  " << endl;
-    double CPU_time_special;
+    ofstream outfile;
+    outfile.open(thomas_name);
+    outfile << "n:" << setw(20) <<  "log10(Max error):" << setw(20) << "CPU time [ms]:" << endl;
     double CPU_time_thomas;
-    double max_err_special;
     double max_err_thomas;
     for (double i = 1; i <= exponent; i += 0.1)
     {   
         Thomas_algorithm(data_name, pow(10, i), CPU_time_thomas, max_err_thomas);
-        Specialized_algorithm(data_name, pow(10, i), CPU_time_special, max_err_special);    
-        outfile1 << pow(10, i) << " " << log10(max_err_special) << endl; 
-        outfile2 << pow(10, i) << " " << CPU_time_special << " " << CPU_time_thomas << endl;
+        outfile << pow(10, i) << setprecision(10) << setw(20) << log10(max_err_thomas)
+         << setprecision(10) << setw(20) << CPU_time_thomas << setprecision(10) << setw(20) << endl; 
     }
-    
-    outfile1.close();
-    outfile2.close();
+    outfile.close();
 }
 
-void error_CPU_time_to_file( int, string, string, string);
+void special_n_to_file(int exponent, string data_name, string special_name)
+{
+    ofstream outfile; 
+    outfile.open(special_name);
+    outfile << "n:" << setw(20) <<  "Max error:" << setw(20) << "CPU time [ms]:" << endl;
+    double max_err_special;
+    double CPU_time_special;
+    for (double i = 1; i <= exponent; i += 0.1)
+    {   
+        Specialized_algorithm(data_name, pow(10, i), CPU_time_special, max_err_special);
+        outfile << pow(10, i) << setprecision(10) << setw(20) << log10(max_err_special)
+        << setprecision(10) << setw(20) << CPU_time_special << setprecision(10) << setw(20) << endl; 
+    }
+    outfile.close();
+}
+
+void thomas_n_to_file( int, string, string, string);
+void special_n_to_file( int, string, string, string);
 int main()
 {   
-    error_CPU_time_to_file( exponent, data_name, error_name, CPU_time_name);
+    thomas_n_to_file(exponent, data_name, thomas_name);
+    special_n_to_file(exponent, data_name, special_name);
     //int n;
     //int exponent; 
     //string filename;
@@ -224,8 +235,9 @@ int main()
     //filename = argv[1];
     //n = atoi(argv[2]);
     //exponent = atoi(argv[3]);
-
-    //double max_err, CPU_time = Thomas_algorithm(data_name, n, true);
+    //double max_err_thomas;
+    //double CPU_time_thomas;
+    //Thomas_algorithm(data_name, n, true, CPU_time_thomas, max_err_thomas);
     //double *r = Specialized_algorithm(data_name, n); 
     return 0;
 }
