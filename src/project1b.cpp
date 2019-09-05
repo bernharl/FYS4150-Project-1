@@ -195,7 +195,7 @@ void thomas_n_to_file(int exponent, string data_name, string thomas_name)
     outfile << "n:" << setw(20) <<  "log10(Max error):" << setw(20) << "CPU time [ms]:" << endl;
     double CPU_time_thomas;
     double max_err_thomas;
-    for (double i = 1; i <= exponent; i += 0.1)
+    for (double i = 1; i <= exponent; i += 1.0)
     {
         Thomas_algorithm(data_name, pow(10, i), CPU_time_thomas, max_err_thomas);
         outfile << pow(10, i) << setprecision(10) << setw(20) << log10(max_err_thomas)
@@ -211,7 +211,7 @@ void special_n_to_file(int exponent, string data_name, string special_name)
     outfile << "n:" << setw(20) <<  "Max error:" << setw(20) << "CPU time [ms]:" << endl;
     double max_err_special;
     double CPU_time_special;
-    for (double i = 1; i <= exponent; i += 0.1)
+    for (double i = 1; i <= exponent; i += 1.0)
     {
         Specialized_algorithm(data_name, pow(10, i), CPU_time_special, max_err_special);
         outfile << pow(10, i) << setprecision(10) << setw(20) << log10(max_err_special)
