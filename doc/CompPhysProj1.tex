@@ -12,7 +12,7 @@
 
 \begin{document}
 
-\title{Numerical Solutions to ODEs by Means of Matrix Algorithms with Comments on Numerical Accuracy and Efficiency}
+\title{Project 1 FYS4150}
 
 
 
@@ -59,7 +59,7 @@ The ODE is now on the form
 where the inhomogenous term $-4\pi\rho\to f$, the variable $r\to x$ and the function $\Phi\to u$. From now on only consider (\ref{eq:ODE}) on dimensionless form. For concreteness we impose the (Dirichlett) bloundary conditions $u(0) = u(1) = 0$ and let analytical solution $u(x)$ and the r.h.s. of (\ref{eq:ODE}) $f(x)$ be given by
 
 \begin{align}
-	u(x) &= 1 - (1 - e^{10})x - e^{10x}\\
+	u(x) &= 1 - (1 - e^{10})x - e^{10x}\label{eq:analytical}\\
 	f(x) &= 100e^{-10x}.
 \end{align}
 Since we know the analytical solution $u(x)$, we may compare it to the numerical solution after solving.
@@ -143,8 +143,8 @@ Now that we have discussed the way to save the matrix $A$ as three vectors, we n
 \end{align}
 Now we can take the second row and subtract the first row multiplyed by a factor $a_1/b_1$ in order to eliminate the first elements of the lower diagonal $a_1$. At the same time it changes the second diagonal element as $\tilde{b}_2 = (b_2 - \frac{a_1}{b_1}c_1)$, and the first r.h.s. element to $F_2 = \tilde{f}_2 - \frac{a_1}{b_1}\tilde{f}_1$. If this is done for every row downwards we eliminate all the lower diagonal elements. This then results in a generalized algorithm for this operation
 \begin{align}
-	\tilde{b}_i &= b_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}c_{i-1}\\
-	F_i & = \tilde{f}_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}\tilde{f}_{i - 1}
+	\tilde{b}_i &= b_i - \frac{a_{i-1}}{b_{i-1}}c_{i-1}\\
+	F_i & = \tilde{f}_i - \frac{a_{i-1}}{b_{i-1}}\tilde{f}_{i - 1}
 \end{align}
 which is calculated in a loop using $i=1,2,3,\ldots, n$. This algorithm is simply a forward substitution. We now have the following set of equations
 \begin{align}
@@ -164,6 +164,7 @@ Now that we have disscussed how we can use the Thomas algorithm to solve an ODE,
 	&\vdots\\
 	\tilde{b}_i &= \tilde{b}(i) = \frac{i + 1}{i},
 \end{align} 
+<<<<<<< Updated upstream
 which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$. For consistancy we let $\tilde{b}_0 = \tilde{b}_{n+1} = 2$ although they are not needed for solving. Now the only thing needed in the main algorithm is thus the update of the $f_i$'s as 
 \begin{align}
 	F_i = \tilde{f}_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}},
@@ -198,7 +199,53 @@ $$U =
 	0 & \hdots & 0 & 0 & u_{nn}
 \end{bmatrix}
 $$
+=======
+which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$.
+>>>>>>> Stashed changes
 \section{Results} \label{sec:results}
+The following results were produced running on na Intel Core i7-6700HQ CPU with a clock speed of 2.60 GHz and 8Gb RAM. The computations were made using C++ using the GNU C++ compiler in Ubnutu 16.04. Solving  the ODE given by equation \ref{eq:ODE} using both the Thomas algorithm and the specialized algorithm produced the plot shown in figure \ref{fig:solution}.  In this figure the numerical solutions are compared with the analytical solution given by \ref{eq:analytical}.
+\begin{figure}[ht]
+	\plotone{{figures/graphs}.eps}
+	\caption{A figure showing the solution of equation \ref{eq:ODE} using both the Thomas algorithm and the special algorithm using $n=1000$ compared with the analyticall solution given by equation .}
+	\label{fig:solution}
+\end{figure}
+
+We studied the evolution of the relative log-error, given by equation \ref{eq:rel_error}, as the number of grid points $n$ increases for the specialized Thomas algorithm. This produced the plot shown in figure \ref{fig:specerror}. Table \ref{tab:error} shows the same error for a few chosen values of $n$ in tabular form for the three methods tested. When $n$ reached the magnitude of approximately $10^5$ the array became too large for the computers memory to handle thus making the LU decomposition unable to handle matrices of this size.
+
+\begin{deluxetable*}{lccc}
+	%\tablewidth{0pt}
+	\tablecaption{The following table shows the relative log-error given by equation \ref{eq:rel_error} for varying degrees of $n$ for the different methods used.\label{tab:error}}
+	\tablecomments{.}
+	\tablecolumns{4}
+	\tablehead{n  &  Specialised algorithm& Thomas algorithm  & LU-decomposition}
+	\startdata
+	$10^1$  & $-1.100$ & $-1.100$ & $$ \\
+	$10^2$ & $-3.079$ & $-3.079$ & $$ \\
+	$10^3$ & $-5.079$ & $-5.079$ & $$ \\
+	$10^4$ & $-7.079$ & $-7.079$ & $$ \\
+	$10^5$ & $-9.077$ & $-8.842$ & Na \\
+	$10^6$ & $-10.050$ & $-6.075$ &  Na \\
+	$10^7$ & $-9.757$ & $-5.525$ & Na 
+	\enddata
+\end{deluxetable*}
+
+The CPU time was also calculated for all three methods. A figure of the CPU time versus the number of linearly spaced grid points $n$ is shown in figure \ref{fig:CPUtimeplot}. 
+
+\begin{figure}[ht]
+	\plotone{{figures/errorplot}.eps}
+	\caption{A figure showing the relative error given by equation \ref{eq:rel_error}  versus the number of linearly spaced grid points $n$.}
+	\label{fig:specerror}
+\end{figure}
+
+\begin{figure}[ht]
+	\plotone{{figures/CPUtimeplot}.eps}
+	\caption{A figure showing the CPU time vs the number of linearly spaced grid points for the Thomas algorithm and the specialized algorithm. }	\label{fig:CPUtimeplot}
+\end{figure}
+
+
+
+
+
 
 \section{Discussion} \label{sec:discussion}
 
