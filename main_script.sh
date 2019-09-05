@@ -5,16 +5,16 @@ read yn
 if [ "$yn" == "y" ]
 then
   echo "Compiling c++ application used for main calculations"
-  g++ -std=c++11  project1b.cpp -o project1b.out
+  g++ -std=c++11 -O2 project1b.cpp -o project1b.out
   echo "Generating data using c++ application"
   ./project1b.out
 fi
 
+echo "Generating function plot"
+python3 plot1b.py data_thomas.dat data_special.dat
 
-echo "Generating error plots"
+echo "Generating error plot"
 python3 errorplot.py special.dat
-echo "Generating cpu time plots"
+
+echo "Generating cpu time plot"
 python3 CPUtimeplot.py thomas.dat special.dat
-echo "Compiling TeX report"
-#cd ../doc/
-#pdftex CompPhysProj1.tex

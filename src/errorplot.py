@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
+
 if len(sys.argv) > 2:
 	raise RuntimeError("Only one data file can be plotted.\n Please enter only one data file in command line")
 
@@ -17,4 +18,6 @@ error = data[:, 1]
 
 plt.plot(np.log10(n), error)
 plt.grid()
-plt.show()
+plt.xlabel(r"$\log_{10}{n}$")
+plt.ylabel(r"$\varepsilon$")
+plt.savefig("../doc/figures/errorplot.eps")
