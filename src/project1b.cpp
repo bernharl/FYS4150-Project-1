@@ -124,6 +124,7 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
     for (int i = 0; i <= n; i++)
     {
         x_arr[i] = i * h;
+
         u_arr[i] = u(x_arr[i]);
         f_arr[i] = f(x_arr[i]) * h_sq;
     }
@@ -228,6 +229,12 @@ int main()
 {
     thomas_n_to_file(exponent, data_name, thomas_name);
     special_n_to_file(exponent, data_name, special_name);
+
+    double dummyx;
+    double dummyxx;
+    Specialized_algorithm(data_name_special, 1000, dummyx, dummyxx, true);
+    Specialized_algorithm(data_name_thomas, 1000, dummyx, dummyxx, true);
+
     //int n;
     //int exponent;
     //string filename;
