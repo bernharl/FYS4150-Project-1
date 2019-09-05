@@ -69,7 +69,7 @@ void Thomas_algorithm(string filename, int n, double &CPU_time_thomas,
 
     for (int i = n - 2; i > 0; i--)
     {   // Backward substitution of remaining solution
-        v_arr[i] = (f_arr[i] + v_arr[i + 1]) / b_A[i];
+        v_arr[i] = (f_arr[i] - c_A[i] * v_arr[i + 1]) / b_A[i];
     }
 
     clock_t t_end = clock(); // End timing of algorithm
@@ -220,8 +220,6 @@ void special_n_to_file(int exponent, string data_name, string special_name)
     outfile.close();
 }
 
-void thomas_n_to_file( int, string, string, string);
-void special_n_to_file( int, string, string, string);
 int main()
 {
     thomas_n_to_file(exponent, data_name, thomas_name);
