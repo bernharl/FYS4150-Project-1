@@ -12,7 +12,7 @@
 
 \begin{document}
 
-\title{Project 1 FYS4150}
+\title{Numerical Solutions to ODEs by Means of Matrix Algorithms with Comments on Numerical Accuracy and Efficiency}
 
 
 
@@ -143,8 +143,8 @@ Now that we have discussed the way to save the matrix $A$ as three vectors, we n
 \end{align}
 Now we can take the second row and subtract the first row multiplyed by a factor $a_1/b_1$ in order to eliminate the first elements of the lower diagonal $a_1$. At the same time it changes the second diagonal element as $\tilde{b}_2 = (b_2 - \frac{a_1}{b_1}c_1)$, and the first r.h.s. element to $F_2 = \tilde{f}_2 - \frac{a_1}{b_1}\tilde{f}_1$. If this is done for every row downwards we eliminate all the lower diagonal elements. This then results in a generalized algorithm for this operation
 \begin{align}
-	\tilde{b}_i &= b_i - \frac{a_{i-1}}{b_{i-1}}c_{i-1}\\
-	F_i & = \tilde{f}_i - \frac{a_{i-1}}{b_{i-1}}\tilde{f}_{i - 1}
+	\tilde{b}_i &= b_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}c_{i-1}\\
+	F_i & = \tilde{f}_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}\tilde{f}_{i - 1}
 \end{align}
 which is calculated in a loop using $i=1,2,3,\ldots, n$. This algorithm is simply a forward substitution. We now have the following set of equations
 \begin{align}
@@ -164,7 +164,19 @@ Now that we have disscussed how we can use the Thomas algorithm to solve an ODE,
 	&\vdots\\
 	\tilde{b}_i &= \tilde{b}(i) = \frac{i + 1}{i},
 \end{align} 
-which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$.
+which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$. For consistancy we let $\tilde{b}_0 = \tilde{b}_{n+1} = 2$ although they are not needed for solving. Now the only thing needed in the main algorithm is thus the update of the $f_i$'s as 
+\begin{align}
+	F_i = \tilde{f}_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}},
+\end{align}
+where we inserted that $a_{i-1} = -1$.
+The backwards substitution on the other hand is the exact same as in the general Thomas algorithm, only inserting $a_i = c_i = -1$.
+
+Now that we have solved the ODE using two different algorithms we can calculate the relative error between the numerical solution $v$ and the analytical solution $u$. We calculate the relative log-error as 
+\begin{align}
+	\epsilon_i = \log_{10} \left|\frac{u_i - v_i}{u_i}\right|
+\end{align}
+Furthermore we can for different grid sizes $n$ calculate the maximum of the relative error $\max(\epsilon_i)$ over all $x_i$. These maximum errors are then plotted as a function of the grid size $n$. Doing this we obtain a graphical illustration of the accuracy of the algorithm used as a function of the grid size $n$. Also we may see at which grid size the loss of numerical presition due to round-off errors in the algorithms becomes evident. This loss of numerical presition should theoretically occur whenever two almost equal numbers are subtracted from eachother. Since numbers on a compter only are represented with a finite amount of digits, we can loose information by truncation of digits outside the range of representation, in mathematical operations done on a computer.
+
 \section{Results} \label{sec:results}
 
 \section{Discussion} \label{sec:discussion}
