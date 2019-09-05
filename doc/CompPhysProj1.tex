@@ -33,7 +33,7 @@ A fundamental characteristic of processes in natur is that things change over ti
 In this paper we will explore problems often encountered when solving differential numerically on a computer, by looking at one specific example of a differentaial equation. We will explore efficient algorithms for solving the one-dimensional Poisson equation (an ordinary differential equation, of ODE, often encountered in physics, by means of numerics. Also we will discuss how the numerical error behaves.
  
 \section{Method} \label{sec:method}
-A differential equation often encountered in physics, e.g. electromagnetism,  is the Poisson equation. In electromagnetism the Poisson equation relates the electric potential $\Phi$ to a charge density $\rho(\vec{r})$ as 
+In order to solve an ODE one can use a variety of different methods and algorithms, some more efficient than others. In this paper we will discuss three different algorithms for solving ODEs, the ultimate aim being to find the most efficient and accurate of them. TO be concrete we will consider a differential equation often encountered in physics, e.g. electromagnetism, is the Poisson equation. In electromagnetism the Poisson equation relates the electric potential $\Phi$ to a charge density $\rho(\vec{r})$ as 
 
 \begin{equation}
 	\nabla^2\Phi = -4\pi\rho(\vec{r}),
@@ -174,9 +174,30 @@ The backwards substitution on the other hand is the exact same as in the general
 Now that we have solved the ODE using two different algorithms we can calculate the relative error between the numerical solution $v$ and the analytical solution $u$. We calculate the relative log-error as 
 \begin{align}
 	\epsilon_i = \log_{10} \left|\frac{u_i - v_i}{u_i}\right|
+	\label{eq:rel_error}
 \end{align}
 Furthermore we can for different grid sizes $n$ calculate the maximum of the relative error $\max(\epsilon_i)$ over all $x_i$. These maximum errors are then plotted as a function of the grid size $n$. Doing this we obtain a graphical illustration of the accuracy of the algorithm used as a function of the grid size $n$. Also we may see at which grid size the loss of numerical presition due to round-off errors in the algorithms becomes evident. This loss of numerical presition should theoretically occur whenever two almost equal numbers are subtracted from eachother. Since numbers on a compter only are represented with a finite amount of digits, we can loose information by truncation of digits outside the range of representation, in mathematical operations done on a computer.
 
+The last algorithm we will discuss in the scope of this paper is how to use LU-decomposition to solve the ODE on the form seen in (\ref{eq:matrix_form}). As the name of this algorithm suggest, the first step in finding the solution is to find a LU-decomposition of the coefficient matrix $A$. We know that $A$ is a positive definite matrix in our case we can always write $A = LU$, where $L$ and $U$ are lower and upper triangular matrices respectively. More precise we chooose all $l_{ii} = 1$
+$$L = 
+\begin{bmatrix}
+	1 & 0 & 0 & \hdots & 0\\
+	l_{21} & 1 & 0 & \hdots & 0\\
+	l_{31} & l_{32} & 1 &\hdots & 0\\
+	\vdots & & \ddots & & \vdots\\
+	l_{n1} & \hdots & l_{n(n-2)} & l_{n(n-1)} & 1
+\end{bmatrix}.
+$$
+The upper triangular matrix 
+$$U = 
+\begin{bmatrix}
+	u_{11} & u_{12} & u_{13} & \hdots & u_{1n}\\
+	0 & u_{22} & u_{23} & \hdots & u_{2n}\\
+	0 & 0 & u_{33} &\hdots & u_{3n}\\
+	\vdots & & \ddots & & \vdots\\
+	0 & \hdots & 0 & 0 & u_{nn}
+\end{bmatrix}
+$$
 \section{Results} \label{sec:results}
 
 \section{Discussion} \label{sec:discussion}
