@@ -19,7 +19,7 @@ inline double u(double x)
     return 1.0 - (1.0 - exp(-10.0)) * x - exp(-10.0*x);
 }
 
-void data_to_file(double*, double*, double*, double*, string);
+void data_to_file(double*, int, double*, double*, double*, string);
 void Thomas_algorithm(string filename, int n, double &CPU_time_thomas,
                         double &max_err_thomas, bool write = false)
 {   /* Function solves one-dimensional Poisson equation
@@ -74,7 +74,6 @@ void Thomas_algorithm(string filename, int n, double &CPU_time_thomas,
 
     clock_t t_end = clock(); // End timing of algorithm
     CPU_time_thomas = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC; // Calculating CPU time [ms] of algorithm
-    //cout << "CPU time: " << CPU_time << " ms " << endl;
 
 
     for (int i = 1; i < n; i++)
@@ -85,7 +84,7 @@ void Thomas_algorithm(string filename, int n, double &CPU_time_thomas,
     if (write == true)
     {   /* Saving numerical values v, analytical calues u, x values
            and log10 error in data file */
-        data_to_file(v_arr, u_arr, x_arr, error, filename);
+        data_to_file(v_arr, n, u_arr, x_arr, error, filename);
     }
 
     max_err_thomas = 0;
@@ -143,7 +142,6 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
         f_arr[i] = f_arr[i] + f_arr[i - 1] / b_tilde[i - 1];
     }
     v_arr[n-1] = f_arr[n-1]/b_tilde[n-1];
-    //cout << "v_arr[n - 1]" << v_arr[n - 1] << endl;
     for (int i = n - 2; i > 0; i--)
     {
         v_arr[i] = (f_arr[i] + v_arr[i + 1]) / b_tilde[i];
@@ -152,16 +150,15 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
 
     clock_t t_end = clock();
     CPU_time_special = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
-    //cout << "CPU time: " << CPU_time << " ms " << endl;
+
 
     for (int i = 1; i < n; i++)
     {
-        //cout << u_arr[i] << "  " << f_arr[i] << endl;
         error[i] = fabs((u_arr[i] - v_arr[i]) / u_arr[i]);
     }
 
     if (write == true){
-        data_to_file(v_arr, u_arr, x_arr, error, filename);
+        data_to_file(v_arr, n, u_arr, x_arr, error, filename);
     }
 
     max_err_special = 0;
@@ -178,7 +175,7 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
     delete [] error;
 }
 
-void data_to_file(double *v_arr, double *u_arr, double *x_arr, double *error, string data_name)
+void data_to_file(double *v_arr, int n, double *u_arr, double *x_arr, double *error, string data_name)
 {
     ofstream outfile;
     outfile.open(data_name);
