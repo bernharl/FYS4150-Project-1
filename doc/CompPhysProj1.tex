@@ -87,7 +87,7 @@ If we assume that the second term (the sum) is small compared to the first term,
 \end{align}
 and let the second term be the error of the approximation
 \begin{align}
-	\epsilon_{analy} \equiv 2\sum^\infty_{j=1} \frac{v_i^{2j+2}}{(2j + 2)!}h^{2j}.
+	\epsilon_{analy} \equiv 2\sum^\infty_{j=1} \frac{v_i^{(2j+2)}}{(2j + 2)!}h^{2j}.
 	\label{eq:analy_error}
 \end{align} Assuming that the first term in $\epsilon_{analy}$ is dominant , i.e. the rest of the terms fall of rapidly, we can see that the numerical error should behave as $\epsilon\sim h^2$. However, since we want to solve the equation on a computer, the error will not necessarily behave like this. Nevertheless it is a good starting point in understanding the numerical error. 
 
@@ -235,7 +235,7 @@ We studied the evolution of the relative log-error, given by equation \ref{eq:re
 
 \begin{deluxetable*}{lccc}
 	%\tablewidth{0pt}
-	\tablecaption{The following table shows the relative log-error given by equation \ref{eq:rel_error} for varying degrees of $n$ for the different methods used.\label{tab:error}}
+	\tablecaption{The following table shows the relative log-error given by equation \ref{eq:rel_error} for varying degrees of $n$ for the different methods used. For $n$ larger than $10^5$ the matrix used in the LU decomposition exceeded the number of bytes available on the computers RAM.\label{tab:error}}
 	\tablecomments{.}
 	\tablecolumns{4}
 	\tablehead{n  &  Specialised algorithm& Thomas algorithm  & LU-decomposition}
@@ -264,15 +264,18 @@ The CPU time was also calculated for all three methods. A figure of the CPU time
 \end{figure}
 
 \section{Discussion} \label{sec:discussion}
+
 When comparing the CPU time for the Thomas algorithm and the specialized algorithm, our results showed that in general the specialized algorithm provided a slightly lower CPU time. This is shown in figure \ref{fig:CPUtimeplot}.  While running the program multiple times, the regular Thomas algorithm can come out faster than the specialized algorithm for smaller $n$.  The amount of FLOPs for the regular Thomas algorithm is $9n$ while the specialized Thomas algorithm has $4n$ FLOPs. Allthough the specialized algorithm has less flops, our results indicate that we do not gain a significant increase in runtime. For low $n$, the regular algorithm may also prove to be faster than the specialized algorithm. One can also see that ,in the logarithmic plot, the runtime is increasing linearly with $n$ whitch would be expected as the FLOPs of both algorithms scales with $n$.  It is also worth noting that there is a lot of noise, especially for lower n which may sometimes make the regular algorithm faster than the specialized algorithm for lower $n$. In addition to calculating the number of arithmetic operations, we also have memory reads and memory writes. Another factor to take into consideration would be background applications running on the computer as these are not constant for each time the program is run. A reasonable way to improve the results would be to take the average for each $n$ after computing for the same $n$ multiple times.\\\indent
-While looking at figure \ref{fig:CPUtimeplot} one can see that for the LU decomposition, the runtime is a lot higher than for the other methods. Since this method has $2n^3/3+2n$ flops this result is expected. Since we have a tridiagonal matrix the LU decomposition will perform excessive computations that are not needed. Therefore this method should not be applied on this kind of problem.
+While looking at figure \ref{fig:CPUtimeplot} one can see that for the LU decomposition, the runtime is a lot higher than for the other methods. Since this method has $2n^3/3+2n^2$ FLOPs this result is expected. Since we have a tridiagonal matrix the LU decomposition will perform excessive computations that are not needed. Therefore this method should not be applied on this kind of problem.
 \\\\\indent
 While looking at the relative maximum error given by equation \ref{eq:rel_error} for an increasing $n$, one can see that the logarithm of the error drops with a slope of approximately $-2$. This is shown in figure \ref{fig:specerror}. This is expected as the error should theoretically behave as $\epsilon\sim h^2$.  A notable feature is that at approximately $n=10^6$, the error changes behaviour. It stops falling of linearly and begins increasing unpredictably. A reason for this may be loss of numerical precision. When $n$ becomes significantly large the steps in our computational grid becomes significantly smaller. Doing arithmetic operations on small number can lead to round off and truncation errors \citep[ch 4.2]{Morken:2017}. These errors can propagate and negatively influence the solution.\\\indent
-While looking at ggg
+While looking at the error for the regular Thomas algorithm, as shown in table \ref{tab:error}, one can see that the onset of this behaviour starts earlier. Allthough the increase in speed may not be hugely significant, the specialized Thomas algorithm allows us to perform computations with higher resolution while still maintaining precision. A reason for this may be the amount of flops required. Since the regular algorithm requires more FLOPs, there will be more arithmetic operations performed on small number which can make the error propagate faster. When $n$ exceeded a value of around $10^5$ the matrix became too large for the computers memory to handle. This resolution is too rough for any significant error to separate the three algorithms.
 
 
 
 \section{Conclusion} \label{sec:conclusion}
+We have tested three different algorithms for solving an ODE. We compared the Thomas algorithm with a specialized Thomas algorithm optimized for our case of a symmetric tridiagonal matrix where all elements on both superdiagonals are equal. We also compared with the standard LU decomposition for solving a linear set of equations. Both the Thomas algorithm and the specialized Thomas algorithm proved far superior to the LU decomposition for this problem. While the specialized algorithm didnt seem to provide a huge improvement to computation time, it provides the ability to apply a larger resolution before any error propagates making it a preferred algorithm of choice for this problem.
+
 
 \bibliography{References.bib}
 \bibliographystyle{aasjournal}
