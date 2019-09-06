@@ -23,7 +23,7 @@ numerical_special = data_special[:, 0]	# Numerical solution computed by Speciali
 analytical = data_thomas[:, 1]			# Analytical solution
 x = data_thomas[:, 2]					# x-values
 
-"""Ploting data"""
+"""Plotting data"""
 plt.plot(x, numerical_thomas, label = "Numerical, Thomas")
 plt.plot(x, analytical, "r--", label = "Analytical")
 plt.plot(x, numerical_special, "--", label = "Numerical, Special")
