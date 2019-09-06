@@ -115,7 +115,7 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
        file is produced. */
 
     double h = 1.0 / ((double) n);  // Step size
-    double h_sq = h * h;                
+    double h_sq = h * h;
     double* u_arr = new double[n + 1];  // Arraay for analytical solution
     double* v_arr = new double[n + 1];  // Array for numerical solution
     double* f_arr = new double[n + 1];  // Array for r.h.s of matrix equation
@@ -131,7 +131,7 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
         f_arr[i] = f(x_arr[i]) * h_sq;
     }
     v_arr[0] = v_arr[n] = 0; // Setting boundary conditions for numerical solution
-    
+
     b_tilde[0] = 2; b_tilde[n] = 2; // Setting endpoints of diagonal vector
     for (int i = 1; i < n; i++)
     {   //Updating diagonal elements due to Gauss elimination
@@ -174,7 +174,7 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
             max_err_special = error[i];
         }
     }
-    // Freeing allocated memory 
+    // Freeing allocated memory
     delete [] b_tilde;
     delete [] u_arr;
     delete [] v_arr;
@@ -184,8 +184,8 @@ void Specialized_algorithm(string filename, int n, double& CPU_time_special,
 }
 
 void data_to_file(double *v_arr, int n, double *u_arr, double *x_arr, double *error, string data_name)
-{   /* Function prints numerical solution, analytical solution, 
-       x values and log10 of the relative error to 
+{   /* Function prints numerical solution, analytical solution,
+       x values and log10 of the relative error to
        data file for single grid size n.*/
 
     ofstream outfile;
@@ -200,8 +200,8 @@ void data_to_file(double *v_arr, int n, double *u_arr, double *x_arr, double *er
 }
 
 void thomas_n_to_file(int exponent, string data_name, string thomas_name)
-{   /* Function prints log10 of relative error and CPU time 
-       for Thomas algorithm for different grid sizes n */ 
+{   /* Function prints log10 of relative error and CPU time
+       for Thomas algorithm for different grid sizes n */
     ofstream outfile;
     outfile.open(thomas_name);
     outfile << "n:" << setw(20) <<  "log10(Max error):" << setw(20) << "CPU time [ms]:" << endl;
@@ -217,7 +217,7 @@ void thomas_n_to_file(int exponent, string data_name, string thomas_name)
 }
 
 void special_n_to_file(int exponent, string data_name, string special_name)
-{   /* Function prints log10 of relative error and CPU time 
+{   /* Function prints log10 of relative error and CPU time
        for specialised thomas algorithm for different grid sizes n */
     ofstream outfile;
     outfile.open(special_name);
@@ -240,8 +240,8 @@ int main()
 
     double dummyx;
     double dummyxx;
-    Specialized_algorithm(data_name_special, 1000, dummyx, dummyxx, true);
-    Thomas_algorithm(data_name_thomas, 1000, dummyx, dummyxx, true);
+    Specialized_algorithm(data_name_special, 10000, dummyx, dummyxx, true);
+    Thomas_algorithm(data_name_thomas, 10000, dummyx, dummyxx, true);
 
     //int n;
     //int exponent;

@@ -27,14 +27,17 @@ int main()
     double step = 0.5;
     int arr_length = (int) (maxpow/step) - 1;
     string filename_err = "errorLU.dat";
-    mat maxerr = zeros <mat> (arr_length);
+    mat maxerr = zeros <vec> (arr_length);
+    mat time = zeros <vec> (arr_length);
+    mat n_arr = zeros <vec> (arr_length);
     mat numerical_solution;
     mat analytical_solution;
     for(float i=1; i <= maxpow; i+=step)
     {
         int arrpos = (i - 1.0) / step;
-        cout << arrpos << endl;
+        //cout << arrpos << endl;
         int n = round(pow(10, i));
+        n_arr(arrpos) = n;
         double h = 1.0 / ((double) n + 1);
 
         double* x_arr = new double[n];
@@ -56,11 +59,13 @@ int main()
 
 
         mat L, U;
+        clock_t t_start = clock();
         lu(L, U, A);
 
         mat y = solve(L, f_vec);
         numerical_solution = solve(U, y);
-
+        clock_t t_end = clock();
+        time(arrpos) = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
         analytical_solution = zeros <vec> (n);
         for(int k=0; k<n; k++)
         {
@@ -68,10 +73,11 @@ int main()
         }
         mat tmp = log10(abs((numerical_solution - analytical_solution) / analytical_solution));
         maxerr(arrpos) =  tmp.max();
-        cout << tmp.index_max() << " " << tmp.max() << endl;
+        //cout << tmp.index_max() << " " << tmp.max() << endl;
         delete [] x_arr;
     }
-    maxerr.print();
+    n_arr.save("nLU.dat", csv_ascii);
+    time.save("timeLU.dat", csv_ascii);
     maxerr.save(filename_err, csv_ascii);
     numerical_solution.save("numLU.dat", csv_ascii);
     analytical_solution.save("anaLU.dat", csv_ascii);
