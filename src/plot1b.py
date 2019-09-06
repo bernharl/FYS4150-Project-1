@@ -31,23 +31,16 @@ analytical = data_thomas_1000[:, 1]			# Analytical solution
 x_10 = data_thomas_10[:, 2]					# x-values for n = 10
 x_1000 = data_thomas_1000[:, 2]				# x-values for n = 1000
 
-<<<<<<< HEAD
 """Plotting data"""
-plt.plot(x, numerical_thomas, label = "Numerical, Thomas")
-plt.plot(x, analytical, "r--", label = "Analytical")
-plt.plot(x, numerical_special, "--", label = "Numerical, Special")
-plt.legend()
-=======
-"""Ploting data"""
-plt.plot(x_10, numerical_thomas_10, label = "Numerical, Thomas, n = 10")
-plt.plot(x_1000, numerical_thomas_1000, label = "Numerical, Thomas, n = 1000")
-plt.plot(x_1000, analytical, "--", label = "Analytical")
-plt.plot(x_10, numerical_special_10, "--", label = "Numerical, Special, n = 10")
-plt.plot(x_1000, numerical_special_1000, linestyle = "dashdot", label = "Numerical, Special, n = 1000")
->>>>>>> master
-plt.xlabel(r"$x$")
-plt.ylabel(r"$u(x)$ $[v(x)]$")
-plt.xticks(fontsize = 12)
+plt.plot(x_10, numerical_thomas_10, label = "v(x), Thomas, n = 10")
+plt.plot(x_1000, numerical_thomas_1000, label = "v(x), Thomas, n = 1000")
+plt.plot(x_1000, analytical, "--", label = "Analytical u(x)")
+plt.plot(x_10, numerical_special_10, "--", label = "v(x), Special, n = 10")
+plt.plot(x_1000, numerical_special_1000, linestyle = "dashdot", label = "v(x), Special, n = 1000")
+plt.xlabel(r"$x$", fontsize = 13)
+plt.ylabel(r"$u(x)$ $[v(x)]$", fontsize = 13)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
 plt.grid()
 plt.legend(loc = 0)
 plt.savefig("../doc/figures/graphs.eps")
