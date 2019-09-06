@@ -23,35 +23,33 @@ inline double u(double x)
 
 int main()
 {
-    int maxpow = 4;
-    double step = 0.5;
-    int arr_length = (int) (maxpow/step) - 1;
-    string filename_err = "errorLU.dat";
-    mat maxerr = zeros <vec> (arr_length);
-    mat time = zeros <vec> (arr_length);
-    mat n_arr = zeros <vec> (arr_length);
+    int maxpow = 4; // Max power 10^maxpow
+    double step = 0.5; // Step of power
+    int arr_length = (int) (maxpow/step) - 1; // Length of arrays in loop
+    mat maxerr = zeros <vec> (arr_length); // Array for saving maximum error
+    mat time = zeros <vec> (arr_length); // Array for saving time taken
+    mat n_arr = zeros <vec> (arr_length); // Array for saving power of 10
     mat numerical_solution;
     mat analytical_solution;
-    for(float i=1; i <= maxpow; i+=step)
+    for(float i=1; i <= maxpow; i+=step) // Looping over solutions with different power
     {
-        int arrpos = (i - 1.0) / step;
-        //cout << arrpos << endl;
-        int n = round(pow(10, i));
+        int arrpos = (i - 1.0) / step; // Index of arrays to save values to
+        int n = round(pow(10, i)); // n to use in an nxn matrix
         n_arr(arrpos) = n;
         double h = 1.0 / ((double) n + 1);
 
-        double* x_arr = new double[n];
+        double* x_arr = new double[n]; // x-values
 
 
-        mat f_vec = zeros <vec> (n);
+        mat f_vec = zeros <vec> (n); // f values
         double h_sqr = h * h;
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < n; j++) // Generating x and f-terms
         {
             x_arr[j] = (j + 1.0) * h;
             f_vec(j) = f(x_arr[j]) * h_sqr;
         }
 
-        mat A = zeros <mat> (n, n);
+        mat A = zeros <mat> (n, n); // Generating the tridiagonal matrix A using Armadillo
         A.diag(0).fill(2);
         A.diag(1).fill(-1);
         A.diag(-1).fill(-1);
@@ -60,27 +58,26 @@ int main()
 
         mat L, U;
         clock_t t_start = clock();
-        lu(L, U, A);
+        lu(L, U, A); // LU decomoposition of A, saved to L and U
 
-        mat y = solve(L, f_vec);
-        numerical_solution = solve(U, y);
+        mat y = solve(L, f_vec); // Solving intermediate step
+        numerical_solution = solve(U, y); // Solving equation
         clock_t t_end = clock();
-        time(arrpos) = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC;
+        time(arrpos) = 1000.0 * (t_end - t_start) / CLOCKS_PER_SEC; // Saving time spent calculating [ms]
         analytical_solution = zeros <vec> (n);
-        for(int k=0; k<n; k++)
+        for(int k=0; k<n; k++) // Calculating analytical solution for n points, used to get error
         {
             analytical_solution(k) = u(x_arr[k]);
         }
         mat tmp = log10(abs((numerical_solution - analytical_solution) / analytical_solution));
-        maxerr(arrpos) =  tmp.max();
-        //cout << tmp.index_max() << " " << tmp.max() << endl;
+        maxerr(arrpos) =  tmp.max(); // Maximum log10 of absolute error for given ixi matrix solution
         delete [] x_arr;
     }
+    // Saving vectors of interest
     n_arr.save("nLU.dat", csv_ascii);
     time.save("timeLU.dat", csv_ascii);
-    maxerr.save(filename_err, csv_ascii);
+    maxerr.save("errorLU.dat", csv_ascii);
     numerical_solution.save("numLU.dat", csv_ascii);
     analytical_solution.save("anaLU.dat", csv_ascii);
-    // cout << maxerr << endl;
     return 0;
 }
