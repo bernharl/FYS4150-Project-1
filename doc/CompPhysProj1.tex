@@ -26,7 +26,9 @@
 \author{Bernhard Nornes Lotsberg}
 
 \begin{abstract}
+We compare numerical solution methods to the static Poisson equation. We implement the Thomas algorithm to solve the equation as a tridiagonal linear algebra equation. We see that increasing the matrix size (decreasing step size) linearly decreases the error when comparing with an analytical solution. This decrease dominates the error until we reach $n~10^5$ steps, when numerical round-off increases the error again. We specialized our tridiagonal algorithm using the fact that our matrix has constant diagonals, reducing the algorithm cost from $O(9n)$ to approximately $O(4n)$. This does not improve run-times, but could in theory improve by parallelizing the initial setup. 
 
+Comparing our algorithm with the standard LU-decomposition method of solving linear algebra problems, proves that tridiagonal systems should always be solved  using the Thomas algorithm. The LU-method uses too much memory to be viable when approaching matrices of the size $n~10^5$, and also has significantly higher run times.
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
