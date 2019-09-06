@@ -11,6 +11,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+
 \begin{document}
 
 \title{Numerical Solutions to ODEs by Means of Matrix Operations}
@@ -29,9 +30,9 @@
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
-A fundamental characteristic of processes in natur is that things change over time and space. Thus in order to understand a physical process it is essential to be able to formulate such a change in terms of differential equations, as this how change is formulated in mathematical terms. Furthermore since most processes in nature possess a high level of complexity, unabling a analytical solution to the corresponding differential equation, one must ofter fall back to numerical techniques. However, if numerics is used and a high level of accuracy is required, one must use a computer to solve the equations. An understanding of how computers handle numbers and can couse errors is thus important.
+A fundamental characteristic of processes in natur is that things change over time and space. Thus in order to understand a physical process it is essential to be able to formulate such a change in terms of differential equations, as this how change is formulated in mathematical terms. Furthermore since most processes in nature possess a high level of complexity, unabling an analytical solution to the corresponding differential equation, one must ofter fall back to numerical techniques. However, if numerics is used and a high level of accuracy is required, one must use a computer to solve the equations. An understanding of how computers handle numbers and can couse errors is thus important.
 
-In this paper we will explore problems often encountered when solving differential numerically on a computer, by looking at a one-dimensional Poisson equation often encountered in physics. We will explore how efficient matrix algorithms like the Thomas algorithm (MORTENS KOMPENDIUM) and LU-decomposition as shown by \citep[p.142]{lay:2015} and \citep[p.668]{Boyd:2004}, as oppose to standard Gaussian elimination, can be used for solving ordinary differential equations (ODEs). Since these algorithms only are approximations, understanding the numerical errors is important. Thus we will also look at how the error behaves when choosing a specific grid size and when truncation errors become evident.   
+In this paper we will explore problems often encountered when solving differential equation numerically on a computer, by looking at a one-dimensional Poisson equation often encountered in physics as a concrete example. We will explore how efficient matrix algorithms like the Thomas algorithm (\citep[]{Jensen:2015}) and LU-decomposition as shown by \citep[p.142]{lay:2015} and \citep[p.668]{Boyd:2004}, as oppose to standard Gaussian elimination, can be used for solving ordinary differential equations (ODEs). Since these algorithms only are approximations, understanding the numerical errors is important. Thus we will also look at how the error behaves when choosing a specific grid size and when truncation errors become evident.   
  
 \section{Method} \label{sec:method}
 In order to solve an ODE one can use a variety of different methods and algorithms, some more efficient than others. In this paper we will discuss three different algorithms for solving ODEs, the ultimate aim being to find the most efficient and accurate of them. TO be concrete we will consider a differential equation often encountered in physics, e.g. electromagnetism, is the Poisson equation. In electromagnetism the Poisson equation relates the electric potential $\Phi$ to a charge density $\rho(\vec{r})$ as 
@@ -256,7 +257,7 @@ The CPU time was also calculated for all three methods. A figure of the CPU time
 
 \begin{figure}[ht]
 	\plotone{{figures/errorplot}.eps}
-	\caption{A figure showing the relative error given by equation \ref{eq:rel_error}  versus the number of linearly spaced grid points $n$.}
+	\caption{A figure showing the maximum relative error given by the equation \ref{eq:rel_error} versus the number of linearly spaced grid points $n$. Note the linear behaviour in the of the graph before $\log_{10} \approx 5$. 
 	\label{fig:specerror}
 \end{figure}
 
