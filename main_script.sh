@@ -5,9 +5,14 @@ read yn
 if [ "$yn" == "y" ]
 then
   echo "Compiling c++ application used for main calculations"
-  g++ -std=c++11 -O2 project1b.cpp -o project1b.out
-  echo "Generating data using c++ application"
+  g++ -std=c++11 -O3 project1b.cpp -o project1b.out
+  echo "Generating data using compiled application"
   ./project1b.out
+  echo "Compiling LU code"
+  g++ -std=c++11 -O3 project1e.cpp -larmadillo -o project1b.out
+  echo "Generating data using compiled LU application"
+  ./project1e.out
+
 fi
 
 echo "Generating function plot"
