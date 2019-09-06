@@ -24,23 +24,28 @@ inline double u(double x)
 int main()
 {
     int maxpow = 4;
+    double step = 0.5;
+    int arr_length = (int) (maxpow/step) - 1;
     string filename_err = "errorLU.dat";
-    mat maxerr = zeros <mat> (maxpow);
-
-    for(int i=1; i <= maxpow; i++)
+    mat maxerr = zeros <mat> (arr_length);
+    mat numerical_solution;
+    mat analytical_solution;
+    for(float i=1; i <= maxpow; i+=step)
     {
-        int n = pow(10, i);
-        double h = 1.0 / ((double) n);
+        int arrpos = (i - 1.0) / step;
+        cout << arrpos << endl;
+        int n = round(pow(10, i));
+        double h = 1.0 / ((double) n + 1);
 
         double* x_arr = new double[n];
 
 
-        mat f_vec = zeros <mat> (n, 1);
+        mat f_vec = zeros <vec> (n);
         double h_sqr = h * h;
-        for (int i = 0; i < n; i++)
+        for (int j = 0; j < n; j++)
         {
-            x_arr[i] = (i + 1.0) * h;
-            f_vec(i) = f(x_arr[i]) * h_sqr;
+            x_arr[j] = (j + 1.0) * h;
+            f_vec(j) = f(x_arr[j]) * h_sqr;
         }
 
         mat A = zeros <mat> (n, n);
@@ -54,18 +59,22 @@ int main()
         lu(L, U, A);
 
         mat y = solve(L, f_vec);
-        mat numerical_solution = solve(U, y);
+        numerical_solution = solve(U, y);
 
-        mat analytical_solution = zeros <mat> (n);
-        for(int ii=0; ii<n; ii++)
+        analytical_solution = zeros <vec> (n);
+        for(int k=0; k<n; k++)
         {
-            analytical_solution(ii) = u(x_arr[ii]);
+            analytical_solution(k) = u(x_arr[k]);
         }
         mat tmp = log10(abs((numerical_solution - analytical_solution) / analytical_solution));
-        maxerr(i-1) =  tmp.max();
+        maxerr(arrpos) =  tmp.max();
+        cout << tmp.index_max() << " " << tmp.max() << endl;
+        delete [] x_arr;
     }
-
+    maxerr.print();
     maxerr.save(filename_err, csv_ascii);
-    //numerical_solution.save("numtest.dat", csv_ascii);
+    numerical_solution.save("numLU.dat", csv_ascii);
+    analytical_solution.save("anaLU.dat", csv_ascii);
+    // cout << maxerr << endl;
     return 0;
 }
