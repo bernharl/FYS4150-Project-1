@@ -25,12 +25,15 @@ n = thomas_data[:, 0]					# Grid size
 CPU_time_thomas = thomas_data[:, 2]		# CPU time of Thomas algo.
 CPU_time_special = special_data[:, 2]	# CPU time of Specialized algo.
 
-"""Ploting CPU times vs grid size n"""
+"""Plotting CPU times vs grid size n"""
+plt.tight_layout(pad = 2)
 plt.plot(np.log10(nLU), np.log10(timeLU), "ro" ,label = "LU-decomposition")
 plt.plot(np.log10(n), np.log10(CPU_time_thomas), label = "Thomas alg.")
 plt.plot(np.log10(n), np.log10(CPU_time_special), label = "Specialized alg.")
 plt.legend(loc = 0)
-plt.xlabel(r"$\log_{10} n$")
-plt.ylabel(r"$\log_{10} t_{CPU}$ [ms]")
+plt.xlabel(r"$\log_{10} n$", fontsize = 13)
+plt.ylabel(r"$\log_{10} (t_{CPU}$ [ms])", fontsize = 13)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
 plt.grid()
 plt.savefig("../doc/figures/CPUtimeplot.eps")

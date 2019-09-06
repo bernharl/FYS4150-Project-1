@@ -19,9 +19,11 @@ data = np.loadtxt(datafile, skiprows = 1)	# Loading data from file
 n = data[:, 0]							  	# Grid sizes
 error = data[:, 1]							# log10 of relative error
 
-"""Ploting log10 of max relative error as function of grid size n""" 
+"""Plotting log10 of max relative error as function of grid size n""" 
 plt.plot(np.log10(n), error)
 plt.grid()
-plt.xlabel(r"$\log_{10}{n}$")
-plt.ylabel(r"$\log_{10}(\varepsilon_{max})$")
+plt.xlabel(r"$\log_{10}{n}$", fontsize = 12)
+plt.ylabel(r"$\log_{10}(\varepsilon_{max})$", fontsize = 12)
+plt.xticks(fontsize = 16)
+plt.yticks(fontsize = 16)
 plt.savefig("../doc/figures/errorplot.eps")
