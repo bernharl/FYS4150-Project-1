@@ -31,4 +31,8 @@ if [ "$yn2" == "y" ]
 then
   cd ../doc/
   pdflatex -synctex=1 -interaction=nonstopmode CompPhysProj1.tex
+  bibtex CompPhysProj1.aux
+  pdflatex -synctex=1 -interaction=nonstopmode CompPhysProj1.tex
+  bibtex CompPhysProj1.aux
+  pdflatex -synctex=1 -interaction=nonstopmode CompPhysProj1.tex
 fi
