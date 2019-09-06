@@ -1,4 +1,3 @@
-
 \documentclass[twocolumn]{aastex62}
 
 
@@ -9,28 +8,30 @@
 \usepackage{physics}
 \usepackage{hyperref}
 \usepackage{natbib}
-
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
 \begin{document}
 
-\title{Project 1 FYS4150}
+\title{Numerical Solutions to ODEs by Means of Matrix Operations}
 
 
 
 
-\author[0000-0002-0786-7307]{Håkon Tansem}
+\author{Håkon Tansem}
 
-\author[0000-0002-0786-7307]{Nils-Ole Stutzer}
+\author{Nils-Ole Stutzer}
 
-\author[0000-0002-0786-7307]{Bernhard Nornes Lotsberg}
+\author{Bernhard Nornes Lotsberg}
 
 \begin{abstract}
 
 \end{abstract}
 
 \section{Introduction} \label{sec:intro}
-A fundamental characteristic of processes in natur is that things change over time, as time flows in a spesific direction. Thus in order to understand a physical process it is essential to be able to formulate such a change in terms of differential equations. Furthermore since most processes in nature possess a high level of complexity, unabling a analytical solution to the corresponding differential equation, one must ofter fall back to numerical techniques. However, if numerics is used and a high level of accuracy is required, one must use a computer to solve the equations.
+A fundamental characteristic of processes in natur is that things change over time and space. Thus in order to understand a physical process it is essential to be able to formulate such a change in terms of differential equations, as this how change is formulated in mathematical terms. Furthermore since most processes in nature possess a high level of complexity, unabling a analytical solution to the corresponding differential equation, one must ofter fall back to numerical techniques. However, if numerics is used and a high level of accuracy is required, one must use a computer to solve the equations. An understanding of how computers handle numbers and can couse errors is thus important.
 
-In this paper we will explore problems often encountered when solving differential numerically on a computer, by looking at one specific example of a differentaial equation. We will explore efficient algorithms for solving the one-dimensional Poisson equation (an ordinary differential equation, of ODE, often encountered in physics, by means of numerics. Also we will discuss how the numerical error behaves.
+In this paper we will explore problems often encountered when solving differential numerically on a computer, by looking at a one-dimensional Poisson equation often encountered in physics. We will explore how efficient matrix algorithms like the Thomas algorithm (MORTENS KOMPENDIUM) and LU-decomposition as shown by \citep[p.142]{lay:2015} and \citep[p.668]{Boyd:2004}, as oppose to standard Gaussian elimination, can be used for solving ordinary differential equations (ODEs). Since these algorithms only are approximations, understanding the numerical errors is important. Thus we will also look at how the error behaves when choosing a specific grid size and when truncation errors become evident.   
  
 \section{Method} \label{sec:method}
 In order to solve an ODE one can use a variety of different methods and algorithms, some more efficient than others. In this paper we will discuss three different algorithms for solving ODEs, the ultimate aim being to find the most efficient and accurate of them. TO be concrete we will consider a differential equation often encountered in physics, e.g. electromagnetism, is the Poisson equation. In electromagnetism the Poisson equation relates the electric potential $\Phi$ to a charge density $\rho(\vec{r})$ as 
@@ -47,7 +48,7 @@ for a positional vector $\vec{r}$. Assuming $\Phi$ only depends on the radial di
 \end{align}
 To make this more convinient to handle, we use the substitution $\tilde{\Phi} = \Phi/r$, such that (\ref{eq:one_dim_poisson1}) can be rewritten as 
 \begin{align}
-	\frac{d^2\Phi}{dr^2} = -4\pi\rho(r).
+	\frac{d^2\tilde{\Phi}}{dr^2} = -4\pi\rho(r).
 \end{align}
 
 The ODE is now on the form 
@@ -144,18 +145,20 @@ Now that we have discussed the way to save the matrix $A$ as three vectors, we n
 \end{align}
 Now we can take the second row and subtract the first row multiplyed by a factor $a_1/b_1$ in order to eliminate the first elements of the lower diagonal $a_1$. At the same time it changes the second diagonal element as $\tilde{b}_2 = (b_2 - \frac{a_1}{b_1}c_1)$, and the first r.h.s. element to $F_2 = \tilde{f}_2 - \frac{a_1}{b_1}\tilde{f}_1$. If this is done for every row downwards we eliminate all the lower diagonal elements. This then results in a generalized algorithm for this operation
 \begin{align}
-	\tilde{b}_i &= b_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}c_{i-1}\\
-	F_i & = \tilde{f}_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}\tilde{f}_{i - 1}
+	\tilde{b}_i &= b_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}c_{i-1}
+	\label{eq:first_forward}\\
+	F_i & = \tilde{f}_i - \frac{a_{i-1}}{\tilde{b}_{i-1}}\tilde{f}_{i - 1}\label{eq:second_forward}
 \end{align}
 which is calculated in a loop using $i=1,2,3,\ldots, n$. This algorithm is simply a forward substitution. We now have the following set of equations
 \begin{align}
 	\tilde{b}_1v_1 + c_1v_2  &= F_1\\
 	\tilde{b}_2v_2 + c_2v_3 &= F_2\\
 	&\vdots\\
-	\tilde{b}_nv_n = F_n	
+	\tilde{b}_nv_n = F_n
+	\label{eq:backward}	
 \end{align}
 
-The next step in solving the matrix equation is to use a backwards substiturion. Since we know the $n$th solution $v_n = F_n/\tilde{b}_n$, we can simply insert this into the $(n-1)$-solution to solve for $v_{n-1}$ as $v_{n} = (F_{n} - c_{n}v_{n+1})/ \tilde{b}_{n}$. By doing this backwards substiturion for all remaining rows we obtain the numerical solution of the ODE. This algorithm for solving ODEs is called the Thomas algorithm (SITER HER). In order to get a rough idea for how efficient the algorithm is we count the floating point operations (FLOPs) for the algorithm, so as to compare its efficiency to for instance a standard row reduction of a dence matrix (the brute force method). To further explore the algorithms efficiency we measure its run time for different matrix sizes $n$. Also we plot the numerical and analytical solutions $v(x)$ and $u(x)$ in the same plot, so as to see how they match. 
+The next step in solving the matrix equation is to use a backwards substiturion. Since we know the $n-$th solution $v_n = F_n/\tilde{b}_n$, we can simply insert this into the $(n-1)$-solution to solve for $v_{n-1}$ as $v_{n} = (F_{n} - c_{n}v_{n+1})/ \tilde{b}_{n}$. By doing this backwards substiturion for all remaining rows we obtain the numerical solution of the ODE. This algorithm for solving ODEs is called the Thomas algorithm (SITER HER). In order to get a rough idea for how efficient the algorithm, is we count the floating point operations (FLOPs) for the algorithm, so as to compare its efficiency to for instance a standard row reduction of a dence matrix. A standard Gauss elimination according to \citep{Boyd:2004}, takes $\frac{2}{3}n^3$ FLOPs (if only the leading term is dominant). We see that the there are 3 FLOPs in each of the two lines of the forward substitution in (\ref{eq:first_forward}) and (\ref{eq:second_forward}) and the backwards substitution, in addition to one FLOPs for the $n$-th solution used in the backwards substitution. Since both substitutions are run $n$ times, the algorithm in total involves $9n + 1$ flops. To further explore the algorithms efficiency we measure its run time for different matrix sizes $n$. Also we plot the numerical and analytical solutions $v(x)$ and $u(x)$ in the same plot, so as to see how they match. 
 
 Now that we have disscussed how we can use the Thomas algorithm to solve an ODE, we can specialize the algorithm to our original matrix used in (\ref{eq:matrix_form}). Since we in this special case know that all elements along each diagonal have the same value, the operations performed in the forward substitution actually become deterministic, meaning that we can precalculate the updateed diagonal elements $\tilde{b}_i$ in a seperate loop outside the algorithm itself. This of course drastically reduces the amount of FLOPs by a large amount, but more on that later. Since all the $a_i = c_i = -1$ and all the $b_i = 2$ we see that we get the new updated diagonal elements in the following function of $i$ due to the forward substituion:
 \begin{align}
@@ -165,13 +168,13 @@ Now that we have disscussed how we can use the Thomas algorithm to solve an ODE,
 	&\vdots\\
 	\tilde{b}_i &= \tilde{b}(i) = \frac{i + 1}{i},
 \end{align} 
-<<<<<<< Updated upstream
 which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$. For consistancy we let $\tilde{b}_0 = \tilde{b}_{n+1} = 2$ although they are not needed for solving. Now the only thing needed in the main algorithm is thus the update of the $f_i$'s as 
 \begin{align}
 	F_i = \tilde{f}_i + \frac{\tilde{f}_{i-1}}{\tilde{b}_{i-1}},
 \end{align}
 where we inserted that $a_{i-1} = -1$.
 The backwards substitution on the other hand is the exact same as in the general Thomas algorithm, only inserting $a_i = c_i = -1$.
+Counting the FLOPs of this specialised algoritm we see that both the forward and backward substiturtions take 2 FLOPs per loop iteration due to pre-calculations, in addition to one FLOPs for the $n$-th solution used in the backwards substitution, giving $4n + 1$ flops in total. Thus this algorithm should theoretically take half the time to run.
 
 Now that we have solved the ODE using two different algorithms we can calculate the relative error between the numerical solution $v$ and the analytical solution $u$. We calculate the relative log-error as 
 \begin{align}
@@ -202,11 +205,9 @@ $$U =
 	0 & \hdots & 0 & 0 & u_{nn}
 \end{bmatrix}.
 $$
-<<<<<<< Updated upstream
-=======
+
 which we save in an array filled in a loop for $i = 1, 2, 3,\ldots, n$.
 
-=======
 In order to see how we use this to solve the matrix equation we take a look at (\ref{eq:matrix_form}) again
 \begin{align}
 	A\vec{v} = LU\vec{v} = L(U\vec{v}) = \vec{\tilde{f}}.
@@ -222,8 +223,8 @@ reducing (\ref{eq:matrix_form}) to
 	\label{eq:Lyf}
 \end{align} 
 Next we solve (\ref{eq:Lyf}) to obtain $\vec{y}$. Since the matrix $L$ is triangular, this is easy to solve. The computed $\vec{y}$ is then inserted into (\ref{eq:Uvy}), which is very easy to solve. Because the matrix $U$ is upper triangular, (\ref{eq:Uvy}) is simply solved by a backwards substitution. 
-Last to compare the performance of the LU-decomposition method we again run the algorithm for different grid sizes $n$ to compute relative error and run time at each run. 
->>>>>>> Stashed changes
+Last to compare the performance of the LU-decomposition method we again run the algorithm for different grid sizes $n$ to compute relative error and run time at each run. According to \citep{Boyd:2004} the LU-decomposition in itself takes $\frac{2}{3}n^3$ FLOPs, in addition to $n^2$ FLOPs for both the solving of $U\vec{v} = \vec{y}$ and $L\vec{y} = \vec{\tilde{f}}$. Compared to the other two discussed algorithms the LU-method should thus be quite a lot slower. The fact that dense matrices are used poses another problem, namely that higher matrix dimensions $n$ quickly will result in the computers memory is exceeded when all the matrix elements are saved.
+
 \section{Results} \label{sec:results}
 The following results were produced running on na Intel Core i7-6700HQ CPU with a clock speed of 2.60 GHz and 8Gb RAM. The computations were made using C++ using the GNU C++ compiler in Ubnutu 16.04. Solving  the ODE given by equation \ref{eq:ODE} using both the Thomas algorithm and the specialized algorithm produced the plot shown in figure \ref{fig:solution}.  In this figure the numerical solutions are compared with the analytical solution given by \ref{eq:analytical}.
 \begin{figure}[ht]
@@ -270,8 +271,7 @@ The CPU time was also calculated for all three methods. A figure of the CPU time
 
 
 \section{Discussion} \label{sec:discussion}
-jeff \citep[p.144]{lay2015linear:2015}
-asd \citep[p.668]{Boyd:2004:CO:993483}
+
 \section{Conclusion} \label{sec:conclusion}
 
 \bibliography{References.bib}
