@@ -19,6 +19,11 @@ python3 errorplot.py special.dat
 echo "Generating cpu time plot"
 python3 CPUtimeplot.py thomas.dat special.dat
 
-echo "Building report"
-cd ../doc/
-pdflatex -synctex=1 -interaction=nonstopmode CompPhysProj1.tex
+
+echo "Build report? (y/n)"
+read yn2
+if [ "$yn2" == "y" ]
+then
+  cd ../doc/
+  pdflatex -synctex=1 -interaction=nonstopmode CompPhysProj1.tex
+fi
