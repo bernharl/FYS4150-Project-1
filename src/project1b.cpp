@@ -240,19 +240,9 @@ int main()
 
     double dummyx;
     double dummyxx;
-    Specialized_algorithm(data_name_special, 10000, dummyx, dummyxx, true);
-    Thomas_algorithm(data_name_thomas, 10000, dummyx, dummyxx, true);
-
-    //int n;
-    //int exponent;
-    //string filename;
-
-    //filename = argv[1];
-    //n = atoi(argv[2]);
-    //exponent = atoi(argv[3]);
-    //double max_err_thomas;
-    //double CPU_time_thomas;
-    //Thomas_algorithm(data_name, n, true, CPU_time_thomas, max_err_thomas);
-    //double *r = Specialized_algorithm(data_name, n);
+    Specialized_algorithm(data_name_special_10, 10, dummyx, dummyxx, true);
+    Specialized_algorithm(data_name_special_1000, 1000, dummyx, dummyxx, true);
+    Thomas_algorithm(data_name_thomas_10, 10, dummyx, dummyxx, true);
+    Thomas_algorithm(data_name_thomas_1000, 1000, dummyx, dummyxx, true);
     return 0;
 }
