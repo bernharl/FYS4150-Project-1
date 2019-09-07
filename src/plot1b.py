@@ -17,10 +17,8 @@ if len(sys.argv) == 3:
 
 """Loading data"""
 data_thomas_10 = np.loadtxt(filename_thomas % 10, skiprows = 1)
-data_thomas_100 = np.loadtxt(filename_thomas % 100, skiprows = 1)
 data_thomas_1000 = np.loadtxt(filename_thomas % 1000, skiprows = 1)
 data_special_10 = np.loadtxt(filename_special % 10, skiprows = 1)
-data_special_100 = np.loadtxt(filename_special % 100, skiprows = 1)
 data_special_1000 = np.loadtxt(filename_special % 1000, skiprows = 1)
 
 numerical_thomas_10 = data_thomas_10[:, 0]	# Numerical solution computed by Thomas algo. with n = 10
@@ -36,7 +34,7 @@ plt.plot(x_10, numerical_thomas_10, label = "v(x), Thomas, n = 10")
 plt.plot(x_1000, numerical_thomas_1000, label = "v(x), Thomas, n = 1000")
 plt.plot(x_1000, analytical, "--", label = "Analytical u(x)")
 plt.plot(x_10, numerical_special_10, "--", label = "v(x), Special, n = 10")
-plt.plot(x_1000, numerical_special_1000, linestyle = "dashdot", label = "v(x), Special, n = 1000")
+plt.plot(x_1000, numerical_special_1000, "k",linestyle = "dashdot", label = "v(x), Special, n = 1000")
 plt.xlabel(r"$x$", fontsize = 13)
 plt.ylabel(r"$u(x)$ $[v(x)]$", fontsize = 13)
 plt.xticks(fontsize = 16)

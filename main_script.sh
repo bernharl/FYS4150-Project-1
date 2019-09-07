@@ -8,7 +8,7 @@ then
   echo "Generating data using compiled application"
   ./project1b.out
   echo "Compiling LU code"
-  g++ -std=c++11 -O3 project1e.cpp -larmadillo -o project1b.out
+  g++ -std=c++11 -O3 project1e.cpp -larmadillo -o project1e.out
   echo "Generating data using compiled LU application"
   ./project1e.out
 
@@ -16,7 +16,7 @@ fi
 
  # Run plot script with corresponding data files
 echo "Generating function plot"
-python3 plot1b.py data_thomas.dat data_special.dat
+python3 plot1b.py data_special_%d.dat data_thomas_%d.dat
 
 echo "Generating error plot"
 python3 errorplot.py special.dat

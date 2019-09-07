@@ -268,7 +268,7 @@ When comparing the CPU time for the Thomas algorithm and the specialized algorit
 While looking at figure \ref{fig:CPUtimeplot} one can see that for the LU decomposition, the runtime is a lot higher than for the other methods. Since this method has $2n^3/3+2n$ flops this result is expected. Since we have a tridiagonal matrix the LU decomposition will perform excessive computations that are not needed. Therefore this method should not be applied on this kind of problem.
 \\\\\indent
 While looking at the relative maximum error given by equation \ref{eq:rel_error} for an increasing $n$, one can see that the logarithm of the error drops with a slope of approximately $-2$. This is shown in figure \ref{fig:specerror}. This is expected as the error should theoretically behave as $\epsilon\sim h^2$.  A notable feature is that at approximately $n=10^6$, the error changes behaviour. It stops falling of linearly and begins increasing unpredictably. A reason for this may be loss of numerical precision. When $n$ becomes significantly large the steps in our computational grid becomes significantly smaller. Doing arithmetic operations on small number can lead to round off and truncation errors \citep[ch 4.2]{Morken:2017}. These errors can propagate and negatively influence the solution.\\\indent
-While looking at ggg
+While looking at
 
 
 
