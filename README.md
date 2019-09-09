@@ -4,6 +4,6 @@ Documents related to the report are located in the /doc folder, while all script
 
 The report along with all data and corresponding figures can be compiled by running main_script.sh.
 
-Contributors to this project:\n
+Contributors to this project:\
 Håkon Tansem, Nils-Ole Stutzer, Bernhard Nornes Lotsberg
 
